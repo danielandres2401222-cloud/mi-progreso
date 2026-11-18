@@ -8,101 +8,106 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Mi Progreso">
+<script>try{if(localStorage.getItem("tema")==="dark")document.documentElement.dataset.theme="dark";}catch(e){}</script>
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png">
-<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icono-pesa-180.png">
+<link rel="icon" href="icono-pesa-192.png">
 <title>Mi Progreso</title>
 <style>
-:root{--bg:#fff;--fg:#0a0a0a;--mut:#6b6b6b;--line:#e4e4e4;--soft:#f4f4f4;--r:16px}
+:root{--bg:#fff;--fg:#0a0a0a;--mut:#6b6b6b;--mut2:#aaa;--line:#e4e4e4;--line2:#ccc;--soft:#f4f4f4;--card:#fff;--seg:#e9e9e9;--bar:#ddd;--barinv:#333;--restanim:#1a1a1a;--r:16px;color-scheme:light}
+html[data-theme=dark]{--bg:#000;--fg:#f2f2f2;--mut:#9a9a9a;--mut2:#5c5c5c;--line:#262626;--line2:#444;--soft:#141414;--card:#1f1f1f;--seg:#1f1f1f;--bar:#333;--barinv:#ccc;--restanim:#e9e9e9;color-scheme:dark}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+button{touch-action:manipulation;-webkit-user-select:none;user-select:none}
 html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif}
 body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
-header{position:sticky;top:0;z-index:5;background:#000;color:#fff;padding:calc(12px + env(safe-area-inset-top)) 18px 12px;display:flex;align-items:center;justify-content:space-between}
-header h1{margin:0;font-size:20px;letter-spacing:.5px;font-weight:800}
-.badge{font-size:12px;border:1px solid #fff;border-radius:99px;padding:3px 10px;white-space:nowrap}
+header{position:sticky;top:0;z-index:5;background:#000;color:#fff;padding:calc(12px + env(safe-area-inset-top)) 18px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid #1d1d1d}
+header h1{margin:0;font-size:20px;letter-spacing:.5px;font-weight:800;white-space:nowrap}
+.hr{display:flex;align-items:center;gap:8px;min-width:0}
+.badge{font-size:12px;border:1px solid #fff;border-radius:99px;padding:3px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#thBtn{background:none;border:1px solid #fff;color:#fff;border-radius:99px;width:30px;height:26px;font-size:14px;padding:0;flex:none}
 main{padding:16px;max-width:560px;margin:0 auto}
-nav{position:fixed;bottom:0;left:0;right:0;z-index:6;background:#fff;border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:6;background:var(--bg);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
 nav button{flex:1;background:none;border:0;padding:10px 0 12px;font:inherit;font-size:11px;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:3px}
 nav button svg{width:24px;height:24px}
-nav button.on{color:#000;font-weight:700}
+nav button.on{color:var(--fg);font-weight:700}
 .card{background:var(--soft);border-radius:var(--r);padding:16px;margin-bottom:14px}
-.card.dark{background:#000;color:#fff}
+.card.dark{background:var(--fg);color:var(--bg)}
 .card h2{margin:0 0 8px;font-size:17px}
 .card h3{margin:0 0 6px;font-size:15px}
-.mut{color:var(--mut)}.dark .mut{color:#aaa}
+.mut{color:var(--mut)}.dark .mut{color:var(--mut2)}
 .small{font-size:13px}
 .big{font-size:40px;font-weight:800;letter-spacing:-1px;line-height:1}
 .row{display:flex;gap:10px;align-items:center}
 .between{justify-content:space-between}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.stat{background:#fff;border-radius:12px;padding:10px;text-align:center}
+.stat{background:var(--soft);border-radius:12px;padding:10px;text-align:center}
 .stat b{display:block;font-size:20px}
 .stat span{font-size:11px;color:var(--mut)}
-.btn{display:block;width:100%;border:0;border-radius:14px;padding:15px;font:inherit;font-weight:700;background:#000;color:#fff;text-align:center}
-.btn.w{background:#fff;color:#000;border:2px solid #000}
-.dark .btn{background:#fff;color:#000}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:15px;font:inherit;font-weight:700;background:var(--fg);color:var(--bg);text-align:center}
+.btn.w{background:var(--bg);color:var(--fg);border:2px solid var(--fg)}
+.dark .btn{background:var(--bg);color:var(--fg)}
+.dark .btn.w{background:var(--fg);color:var(--bg);border-color:var(--bg)}
 .btn.sm{display:inline-block;width:auto;padding:9px 14px;font-size:14px;border-radius:10px}
 .btn:active{opacity:.75}
-.bar{height:10px;background:#ddd;border-radius:99px;overflow:hidden}
-.dark .bar{background:#333}
-.bar i{display:block;height:100%;background:#000;border-radius:99px}
-.dark .bar i{background:#fff}
+.bar{height:10px;background:var(--bar);border-radius:99px;overflow:hidden}
+.dark .bar{background:var(--barinv)}
+.bar i{display:block;height:100%;background:var(--fg);border-radius:99px}
+.dark .bar i{background:var(--bg)}
 label{display:block;font-size:13px;color:var(--mut);margin:10px 0 4px}
-input,select,textarea{width:100%;font:inherit;font-size:16px;padding:12px;border:1.5px solid #ccc;border-radius:12px;background:#fff;color:#000}
-input:focus,select:focus,textarea:focus{outline:none;border-color:#000}
+input,select,textarea{width:100%;font:inherit;font-size:16px;padding:12px;border:1.5px solid var(--line2);border-radius:12px;background:var(--card);color:var(--fg)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--fg)}
 .list .it{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
 .list .it:last-child{border-bottom:0}
 .day{width:44px;text-align:center;font-weight:800;font-size:13px}
-.day.today{background:#000;color:#fff;border-radius:10px;padding:4px 0}
-.thumb{width:64px;height:58px;background:#fff;border-radius:10px;flex:none}
+.day.today{background:var(--fg);color:var(--bg);border-radius:10px;padding:4px 0}
+.thumb{width:64px;height:58px;background:var(--card);border-radius:10px;flex:none}
 .thumb svg,.anim svg{width:100%;height:100%;display:block}
 .exgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.exgrid .ex{background:#fff;border-radius:12px;padding:6px 6px 10px;text-align:center;font-size:13px;font-weight:600}
+.exgrid .ex{background:var(--card);border-radius:12px;padding:6px 6px 10px;text-align:center;font-size:13px;font-weight:600}
 .exgrid .ex .anim{height:110px}
-.chip{display:inline-block;font-size:12px;border:1.5px solid #000;border-radius:99px;padding:3px 10px;margin:2px 4px 2px 0}
-.chip.on{background:#000;color:#fff}
-.seg{display:flex;background:#e9e9e9;border-radius:10px;padding:3px;gap:3px}
-.seg button{flex:1;border:0;background:none;padding:7px;border-radius:8px;font:inherit;font-size:13px}
-.seg button.on{background:#fff;font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.chip{display:inline-block;font-size:12px;border:1.5px solid var(--fg);border-radius:99px;padding:3px 10px;margin:2px 4px 2px 0}
+.chip.on{background:var(--fg);color:var(--bg)}
+.seg{display:flex;background:var(--seg);border-radius:10px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:none;padding:8px;border-radius:8px;font:inherit;font-size:13px;color:var(--fg)}
+.seg button.on{background:var(--fg);color:var(--bg);font-weight:700}
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:12px}
 .cal .h{color:var(--mut);font-weight:700}
 .cal .c{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%}
-.cal .c.tr{background:#000;color:#fff;font-weight:700}
-.cal .c.td{outline:2px solid #000}
+.cal .c.tr{background:var(--fg);color:var(--bg);font-weight:700}
+.cal .c.td{outline:2px solid var(--fg)}
 .cal .c.wg{box-shadow:inset 0 -3px 0 #999}
 .hide{display:none!important}
-.note{font-size:13px;border-left:3px solid #000;padding:4px 0 4px 10px;margin:10px 0}
+.note{font-size:13px;border-left:3px solid var(--fg);padding:4px 0 4px 10px;margin:10px 0}
 .x{background:none;border:0;font-size:20px;color:var(--mut);padding:4px 8px}
-/* player */
-#player{position:fixed;inset:0;z-index:20;background:#fff;display:flex;flex-direction:column;padding:calc(10px + env(safe-area-inset-top)) 18px calc(16px + env(safe-area-inset-bottom))}
-#player.rest{background:#000;color:#fff}
-#player.rest .mut{color:#aaa}
+#player{position:fixed;top:0;left:0;right:0;height:100vh;height:100dvh;z-index:20;background:var(--bg);color:var(--fg);display:flex;flex-direction:column;padding:calc(10px + env(safe-area-inset-top)) 18px calc(16px + env(safe-area-inset-bottom));overflow:hidden}
+#player.rest{background:var(--fg);color:var(--bg)}
+#player.rest .mut{color:var(--mut2)}
 #player .top{display:flex;justify-content:space-between;align-items:center}
-#player .prog{height:4px;background:#e4e4e4;border-radius:9px;margin:8px 0;overflow:hidden}
-#player.rest .prog{background:#333}
-#player .prog i{display:block;height:100%;background:#000}
-#player.rest .prog i{background:#fff}
-#player .stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:0}
-#player .anim{width:100%;max-width:360px;flex:1;max-height:42vh;background:var(--soft);border-radius:20px}
-#player.rest .anim{background:#1a1a1a}
+#player .prog{height:4px;background:var(--line);border-radius:9px;margin:8px 0;overflow:hidden}
+#player.rest .prog{background:var(--mut2)}
+#player .prog i{display:block;height:100%;background:var(--fg)}
+#player.rest .prog i{background:var(--bg)}
+#player .stage{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:0;overflow:hidden}
+#player .anim{width:100%;max-width:360px;flex:1 1 auto;min-height:120px;max-height:40vh;background:var(--soft);border-radius:20px;pointer-events:none}
+#player.rest .anim{background:var(--restanim)}
 #player h2{margin:12px 0 2px;font-size:24px}
 #player .tgt{font-size:56px;font-weight:800;letter-spacing:-2px;line-height:1.05;margin:6px 0}
 #player .cues{font-size:14px;color:var(--mut);max-width:380px;margin:4px 0 0;padding:0;list-style:none}
-#player.rest .cues{color:#aaa}
-#player .ctr{display:flex;gap:10px;margin-top:12px}
+#player.rest .cues{color:var(--mut2)}
+#player .ctr{display:flex;gap:10px;margin-top:12px;flex:none;position:relative;z-index:2}
 #player .ctr .btn{flex:1}
-#player.rest .btn{background:#fff;color:#000}
-#player.rest .btn.w{background:#000;color:#fff;border-color:#fff}
+#player.rest .btn{background:var(--bg);color:var(--fg)}
+#player.rest .btn.w{background:var(--fg);color:var(--bg);border-color:var(--bg)}
 .rate{display:flex;gap:8px;margin:14px 0}
-.rate button{flex:1;padding:14px 6px;border:2px solid #000;background:#fff;border-radius:12px;font:inherit;font-weight:700}
-.rate button.on{background:#000;color:#fff}
-.modal{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.5);display:flex;align-items:flex-end}
-.modal .sheet{background:#fff;width:100%;max-width:560px;margin:0 auto;border-radius:20px 20px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}
+.rate button{flex:1;padding:14px 6px;border:2px solid var(--fg);background:var(--bg);color:var(--fg);border-radius:12px;font:inherit;font-weight:700}
+.rate button.on{background:var(--fg);color:var(--bg)}
+.modal{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.6);display:flex;align-items:flex-end}
+.modal .sheet{background:var(--bg);color:var(--fg);width:100%;max-width:560px;margin:0 auto;border-radius:20px 20px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}
 </style>
 </head>
 <body>
-<header><h1>MI PROGRESO</h1><span class="badge" id="wkBadge"></span></header>
+<header><h1>MI PROGRESO</h1><div class="hr"><span class="badge" id="wkBadge"></span><button id="thBtn" aria-label="Claro / Nocturno"></button></div></header>
 <main id="view"></main>
 <nav id="nav">
  <button data-t="inicio" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</button>
@@ -148,34 +153,39 @@ function lerp(a,b,t){
   if(a&&typeof a==='object'){const o={}; for(const k in a) o[k]=(k==='k')?a[k]:lerp(a[k],b[k],t); return o;}
   return a;
 }
-const ln=(p,q,c,w)=>`<line x1="${p[0].toFixed(1)}" y1="${p[1].toFixed(1)}" x2="${q[0].toFixed(1)}" y2="${q[1].toFixed(1)}" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`;
-function chair(x,y,back){ // seat from x to x+40 at height y
-  const c='#b5b5b5'; const bx= back==='L'?x:x+40;
-  return ln([x,y],[x+40,y],c,4)+ln([x+3,y],[x+3,200],c,3)+ln([x+37,y],[x+37,200],c,3)+ln([bx,y],[bx,y-46],c,4);
+const ln=(p,q,c,w)=>['line',{x1:p[0],y1:p[1],x2:q[0],y2:q[1],stroke:c,'stroke-width':w,'stroke-linecap':'round'}];
+function chair(x,y,back){ // asiento de x a x+40 a la altura y
+  const c='#9a9a9a'; const bx= back==='L'?x:x+40;
+  return [ln([x,y],[x+40,y],c,4),ln([x+3,y],[x+3,200],c,3),ln([x+37,y],[x+37,200],c,3),ln([bx,y],[bx,y-46],c,4)];
 }
-function props(list){
-  let s='';
+function props(list,dark){
+  const out=[], fill=dark?'#2c2c2c':'#e6e6e6', st=dark?'#666':'#b5b5b5';
   (list||[]).forEach(p=>{
-    if(p==='chairBack') s+=chair(58,168,'L');
-    if(p==='chairFront') s+=chair(156,168,'R');
-    if(p==='chairSeat') s+=chair(82,166,'L');
-    if(p==='counter') s+=`<rect x="188" y="150" width="60" height="50" fill="#e6e6e6" stroke="#b5b5b5" stroke-width="2"/>`;
-    if(p==='mat') s+=`<rect x="28" y="198" width="190" height="4" rx="2" fill="#cfcfcf"/>`;
+    if(p==='chairBack') out.push(...chair(58,168,'L'));
+    if(p==='chairFront') out.push(...chair(156,168,'R'));
+    if(p==='chairSeat') out.push(...chair(82,166,'L'));
+    if(p==='counter') out.push(['rect',{x:188,y:150,width:60,height:50,fill,stroke:st,'stroke-width':2}]);
+    if(p==='wall') out.push(['rect',{x:184,y:20,width:12,height:180,fill,stroke:st,'stroke-width':2}]);
+    if(p==='mat') out.push(['rect',{x:28,y:198,width:190,height:4,rx:2,fill:dark?'#3a3a3a':'#cfcfcf'}]);
   });
-  return s;
+  return out;
 }
+function figureShapes(ex,pose,dark){
+  const F=solve(pose), fg=dark?'#f2f2f2':'#0a0a0a', bk=dark?'#6d6d6d':'#a8a8a8', W=7, hole=dark?'#000':'#fff';
+  const w=ex.w, sh=[ln([0,201],[240,201],dark?'#444':'#d0d0d0',2), ...props(ex.props,dark)];
+  const db=(p,c)=>{sh.push(['circle',{cx:p[0],cy:p[1],r:6.5,fill:c}]); sh.push(['circle',{cx:p[0],cy:p[1],r:2.2,fill:hole}]);};
+  const limbS=(L,c,isLeg)=>{sh.push(ln(isLeg?F.hip:F.sho,L[0],c,W), ln(L[0],L[1],c,W)); if(isLeg) sh.push(ln(L[1],L[2],c,W-1));};
+  limbS(F.legs[1],bk,1); limbS(F.arms[1],bk,0);
+  if(w===true||(Array.isArray(w)&&w[1])) db(F.arms[1][1],bk);
+  sh.push(ln(F.hip,F.neck,fg,W+2), ['circle',{cx:F.head[0],cy:F.head[1],r:10.5,fill:fg}]);
+  limbS(F.legs[0],fg,1); limbS(F.arms[0],fg,0);
+  if(w===true||(Array.isArray(w)&&w[0])) db(F.arms[0][1],fg);
+  if(w==='goblet'){const m=lerp(F.arms[0][1],F.arms[1][1],.5); sh.push(['rect',{x:m[0]-6,y:m[1]-11,width:12,height:22,rx:4,fill:fg}]);}
+  return sh;
+}
+const fmtA=v=>typeof v==='number'?v.toFixed(1):v;
 function figureSVG(ex,pose,dark){
-  const F=solve(pose), fg=dark?'#fff':'#0a0a0a', bk=dark?'#6d6d6d':'#a8a8a8', W=7;
-  const w=ex.w; let s=`<line x1="0" y1="201" x2="240" y2="201" stroke="${dark?'#444':'#d0d0d0'}" stroke-width="2"/>`+props(ex.props);
-  const db=(p,c)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="6.5" fill="${c}"/><circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="2.2" fill="${dark?'#000':'#fff'}"/>`;
-  const drawLimb=(L,c,isLeg)=>{let r=ln(isLeg?F.hip:F.sho,L[0],c,W)+ln(L[0],L[1],c,W); if(isLeg) r+=ln(L[1],L[2],c,W-1); return r;};
-  s+=drawLimb(F.legs[1],bk,1)+drawLimb(F.arms[1],bk,0);
-  if(w===true||(Array.isArray(w)&&w[1])) s+=db(F.arms[1][1],bk);
-  s+=ln(F.hip,F.neck,fg,W+2)+`<circle cx="${F.head[0].toFixed(1)}" cy="${F.head[1].toFixed(1)}" r="10.5" fill="${fg}"/>`;
-  s+=drawLimb(F.legs[0],fg,1)+drawLimb(F.arms[0],fg,0);
-  if(w===true||(Array.isArray(w)&&w[0])) s+=db(F.arms[0][1],fg);
-  if(w==='goblet'){const m=lerp(F.arms[0][1],F.arms[1][1],.5); s+=`<rect x="${(m[0]-6).toFixed(1)}" y="${(m[1]-11).toFixed(1)}" width="12" height="22" rx="4" fill="${fg}"/>`;}
-  return `<svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
+  return '<svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">'+figureShapes(ex,pose,dark).map(([t,a])=>'<'+t+' '+Object.keys(a).map(k=>k+'="'+fmtA(a[k])+'"').join(' ')+'/>').join('')+'</svg>';
 }
 function poseAt(ex,ms){
   const f=ex.f, seq=ex.seq||[0,1], seg=ex.dur||1200;
@@ -186,10 +196,23 @@ function poseAt(ex,ms){
   const a=f[seq[i]], b=f[seq[(i+1)%seq.length]];
   return lerp(a,b,u);
 }
+const NS='http://www.w3.org/2000/svg';
 const ANIMS=new Set();
-function mountAnim(el,exId,dark){ const ex=EX[exId]; if(!ex) return; ANIMS.add({el,ex,dark,t0:performance.now()-Math.random()*300}); el.innerHTML=figureSVG(ex,ex.f[0],dark); }
+function buildNodes(a,shapes){
+  a.el.innerHTML=''; const svg=document.createElementNS(NS,'svg'); svg.setAttribute('viewBox','0 0 240 210');
+  a.nodes=shapes.map(([t,at])=>{const n=document.createElementNS(NS,t); for(const k in at) n.setAttribute(k,fmtA(at[k])); svg.appendChild(n); return n;});
+  a.el.appendChild(svg);
+}
+function mountAnim(el,exId,dark){ const ex=EX[exId]; if(!ex) return; const a={el,ex,dark,t0:performance.now()-Math.random()*300,nodes:null}; buildNodes(a,figureShapes(ex,ex.f[0],dark)); ANIMS.add(a); }
 (function loop(now){
-  ANIMS.forEach(a=>{ if(!a.el.isConnected){ANIMS.delete(a);return;} try{a.el.innerHTML=figureSVG(a.ex,poseAt(a.ex,now-a.t0),a.dark);}catch(e){ANIMS.delete(a);} });
+  ANIMS.forEach(a=>{
+    if(!a.el.isConnected){ANIMS.delete(a);return;}
+    try{
+      const sh=figureShapes(a.ex,poseAt(a.ex,now-a.t0),a.dark);
+      if(!a.nodes||a.nodes.length!==sh.length) return buildNodes(a,sh);
+      sh.forEach(([t,at],i)=>{const n=a.nodes[i]; for(const k in at){ if(typeof at[k]==='number') n.setAttribute(k,at[k].toFixed(1)); }});
+    }catch(e){ANIMS.delete(a);}
+  });
   requestAnimationFrame(loop);
 })(performance.now());
 
@@ -385,10 +408,14 @@ function milestones(){ const st=S.profile.startWeight, g=S.profile.goal, m=[]; f
 const $=s=>document.querySelector(s);
 const view=$('#view');
 let tab='inicio';
+const isDark=()=>document.documentElement.dataset.theme==='dark';
+function setTheme(t){ document.documentElement.dataset.theme=t; try{localStorage.setItem('tema',t);}catch(e){} render(); }
+function syncThemeBtn(){ const b=document.getElementById('thBtn'); if(b){ b.textContent=isDark()?'☀':'☾'; b.onclick=()=>setTheme(isDark()?'light':'dark'); } }
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
 function render(){
+  syncThemeBtn();
   if(!S){ $('#nav').classList.add('hide'); $('#wkBadge').textContent=''; return onboarding(); }
   $('#nav').classList.remove('hide');
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
@@ -436,7 +463,7 @@ function inicio(){
   <div class="card dark">
     <div class="mut small">${['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'][dow]} · Hola ${esc(S.profile.name)}</div>
     ${wo?`<h2 style="font-size:22px;margin:6px 0 2px">${wo.n}</h2><div class="mut small">~${estMin(wo)} min · Fase ${pi+1}: ${PHASES[pi].n}${doneToday?' · ✓ hecho hoy':''}</div>
-    <div class="row" style="margin-top:12px"><button class="btn" id="goW">${doneToday?'Repetir':'Empezar'}</button><button class="btn w sm" id="seeW" style="background:#000;color:#fff;border-color:#fff">Ver</button></div>`
+    <div class="row" style="margin-top:12px"><button class="btn" id="goW">${doneToday?'Repetir':'Empezar'}</button><button class="btn w sm" id="seeW">Ver</button></div>`
     :`<h2 style="font-size:22px;margin:6px 0 2px">Día de descanso</h2><div class="mut small">El descanso también es parte del plan: ahí el cuerpo se recupera. Si quieres, sal a caminar suave.</div>`}
   </div>
   <div class="card">
@@ -481,7 +508,7 @@ function entrenar(){
   <div class="card"><h2>Ejercicios</h2><p class="small mut" style="margin-top:0">Toca uno para ver la técnica.</p><div class="exgrid" id="lib"></div></div>`;
   document.querySelectorAll('#wkList .it').forEach(el=>{const id=sch[+el.dataset.i]; if(id) el.onclick=()=>showWorkout(workout(id,pi,w));});
   const lib=$('#lib');
-  Object.keys(EX).forEach(k=>{const d=document.createElement('div'); d.className='ex'; d.innerHTML=`<div class="anim"></div>${EX[k].n}`; lib.appendChild(d); mountAnim(d.querySelector('.anim'),k); d.onclick=()=>showEx(k);});
+  Object.keys(EX).forEach(k=>{const d=document.createElement('div'); d.className='ex'; d.innerHTML=`<div class="anim"></div>${EX[k].n}`; lib.appendChild(d); mountAnim(d.querySelector('.anim'),k,isDark()); d.onclick=()=>showEx(k);});
 }
 function showEx(k){
   const x=EX[k];
@@ -489,7 +516,7 @@ function showEx(k){
    <div class="anim" id="mAnim" style="height:230px;background:var(--soft);border-radius:16px;margin:10px 0"></div>
    <ol class="small" style="padding-left:18px">${x.c.map(c=>`<li>${c}</li>`).join('')}</ol>
    ${x.w?'<p class="small mut">Usa tus mancuernas de 6 kg.</p>':''}${x.side?'<p class="small mut">Las repeticiones son por lado.</p>':''}`);
-  mountAnim($('#mAnim'),k);
+  mountAnim($('#mAnim'),k,isDark());
 }
 function itemLine(w,it){
   const x=EX[it.ex];
@@ -502,7 +529,7 @@ function showWorkout(w){
   openModal(`<div class="row between"><h2 style="margin:0">${w.n}</h2><button class="x" onclick="closeModal()">✕</button></div>
    <p class="small mut">~${estMin(w)} min · incluye 3 min de calentamiento y vuelta a la calma${w.type==='circuit'?` · ${w.rounds} rondas`:''}</p>
    <div class="list">${rows}</div><br><button class="btn" id="mGo">Empezar</button>`);
-  document.querySelectorAll('#sheet .thumb').forEach(el=>mountAnim(el,el.dataset.ex));
+  document.querySelectorAll('#sheet .thumb').forEach(el=>mountAnim(el,el.dataset.ex,isDark()));
   $('#mGo').onclick=()=>{closeModal();startPlayer(w);};
 }
 function openModal(h){ $('#sheet').innerHTML=h; $('#modal').classList.remove('hide'); }
@@ -563,12 +590,12 @@ function drawChart(){
   const Wd=340,H=200,pl=34,pr=8,pt=10,pb=22;
   const X=d=>pl+(Wd-pl-pr)*((d-x0)/span), Y=v=>pt+(H-pt-pb)*(1-(v-lo)/(hi-lo));
   let s='';
-  const ticks=5; for(let i=0;i<=ticks;i++){const v=lo+(hi-lo)*i/ticks; s+=`<line x1="${pl}" x2="${Wd-pr}" y1="${Y(v)}" y2="${Y(v)}" stroke="#eee"/><text x="${pl-4}" y="${Y(v)+4}" font-size="10" text-anchor="end" fill="#888">${Math.round(v)}</text>`;}
+  const ticks=5; for(let i=0;i<=ticks;i++){const v=lo+(hi-lo)*i/ticks; s+=`<line x1="${pl}" x2="${Wd-pr}" y1="${Y(v)}" y2="${Y(v)}" stroke="#8884"/><text x="${pl-4}" y="${Y(v)+4}" font-size="10" text-anchor="end" fill="#888">${Math.round(v)}</text>`;}
   s+=`<text x="${pl}" y="${H-6}" font-size="10" fill="#888">${fmtD(ds(x0))} ${String(x0.getFullYear()).slice(2)}</text><text x="${Wd-pr}" y="${H-6}" font-size="10" fill="#888" text-anchor="end">${fmtD(ds(x1))} ${String(x1.getFullYear()).slice(2)}</text>`;
-  if(g>=lo&&g<=hi) s+=`<line x1="${pl}" x2="${Wd-pr}" y1="${Y(g)}" y2="${Y(g)}" stroke="#000" stroke-dasharray="6 4"/><text x="${Wd-pr}" y="${Y(g)-4}" font-size="10" text-anchor="end">meta</text>`;
+  if(g>=lo&&g<=hi) s+=`<line x1="${pl}" x2="${Wd-pr}" y1="${Y(g)}" y2="${Y(g)}" stroke="currentColor" stroke-dasharray="6 4"/><text x="${Wd-pr}" y="${Y(g)-4}" font-size="10" text-anchor="end" fill="currentColor">meta</text>`;
   const pa=[]; for(let i=0;i<=30;i++){const d=new Date(+x0+span*i/30); pa.push(X(d).toFixed(1)+','+Y(planAt(d)).toFixed(1));} s+=`<polyline points="${pa.join(' ')}" fill="none" stroke="#aaa" stroke-width="2" stroke-dasharray="2 4"/>`;
-  s+=`<polyline points="${pts.map(p=>X(parse(p.d)).toFixed(1)+','+Y(p.w).toFixed(1)).join(' ')}" fill="none" stroke="#000" stroke-width="2.5" stroke-linejoin="round"/>`;
-  pts.forEach(p=>s+=`<circle cx="${X(parse(p.d)).toFixed(1)}" cy="${Y(p.w).toFixed(1)}" r="3.5" fill="#000"/>`);
+  s+=`<polyline points="${pts.map(p=>X(parse(p.d)).toFixed(1)+','+Y(p.w).toFixed(1)).join(' ')}" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>`;
+  pts.forEach(p=>s+=`<circle cx="${X(parse(p.d)).toFixed(1)}" cy="${Y(p.w).toFixed(1)}" r="3.5" fill="currentColor"/>`);
   $('#chart').innerHTML=`<svg viewBox="0 0 ${Wd} ${H}" style="width:100%;display:block">${s}</svg>`;
 }
 function weightForm(){
@@ -590,6 +617,7 @@ function weightForm(){
 function ajustes(){
   const p=S.profile;
   view.innerHTML=`
+  <div class="card"><h2>Apariencia</h2><div class="seg" id="thSeg"><button data-t="light" class="${isDark()?'':'on'}">☀ Claro</button><button data-t="dark" class="${isDark()?'on':''}">☾ Nocturno</button></div></div>
   <div class="card"><h2>Perfil y meta</h2>
    <label>Nombre</label><input id="a_n" value="${esc(p.name)}">
    <div class="grid2"><div><label>Estatura (cm)</label><input id="a_h" type="text" inputmode="decimal" value="${numStr(p.height)}"></div><div><label>Edad</label><input id="a_a" type="text" inputmode="decimal" value="${p.age||''}"></div></div>
@@ -598,11 +626,12 @@ function ajustes(){
    <br><br><button class="btn" id="a_ok">Guardar cambios</button></div>
   <div class="card"><h2>Fase del plan</h2><p class="small mut" style="margin-top:0">Normalmente avanza sola según la semana. Si una fase te queda muy dura, puedes quedarte en la anterior un tiempo.</p>
    <select id="a_p"><option value="">Automática (según semana)</option>${PHASES.map((x,i)=>`<option value="${i}" ${S.settings.phaseOverride==i&&S.settings.phaseOverride!==null&&S.settings.phaseOverride!==''?'selected':''}>Fase ${i+1}: ${x.n}</option>`).join('')}</select></div>
-  <div class="card"><h2>Sonido</h2><label style="display:flex;gap:10px;align-items:center;color:#000;font-size:15px"><input type="checkbox" id="a_snd" style="width:auto" ${S.settings.sound?'checked':''}> Pitidos al terminar cada tiempo</label><p class="small mut">En iPhone, el sonido no se escucha si el teléfono está en modo silencio.</p></div>
+  <div class="card"><h2>Sonido</h2><label style="display:flex;gap:10px;align-items:center;color:var(--fg);font-size:15px"><input type="checkbox" id="a_snd" style="width:auto" ${S.settings.sound?'checked':''}> Pitidos al terminar cada tiempo</label><p class="small mut">En iPhone, el sonido no se escucha si el teléfono está en modo silencio.</p></div>
   <div class="card"><h2>Respaldo</h2><p class="small mut" style="margin-top:0">Tus datos viven solo en este teléfono. Descarga un respaldo de vez en cuando (por ejemplo, una vez al mes) y guárdalo en Archivos o en iCloud.</p>
    <div class="grid2"><button class="btn" id="a_exp">Descargar respaldo</button><button class="btn w" id="a_imp">Restaurar</button></div><input type="file" id="a_file" accept=".json,application/json" class="hide"></div>
   <div class="card"><h2>Borrar todo</h2><button class="btn w" id="a_rst">Borrar mis datos</button></div>
   ${installHint()}`;
+  document.querySelectorAll('#thSeg button').forEach(b=>b.onclick=()=>setTheme(b.dataset.t));
   $('#a_ok').onclick=()=>{ const g=num($('#a_g').value), w=num($('#a_w').value); if(!g||!w||g>=w){alert('La meta debe ser menor al peso inicial.');return;}
     Object.assign(p,{name:$('#a_n').value.trim(),height:num($('#a_h').value)||p.height,age:num($('#a_a').value),startWeight:w,goal:g,start:$('#a_s').value||p.start}); save(); alert('Guardado'); render(); };
   $('#a_p').onchange=e=>{S.settings.phaseOverride=e.target.value===''?null:+e.target.value; save(); render();};
@@ -626,6 +655,12 @@ function startPlayer(w){
   PL={w,st:steps(w),i:0,t0:Date.now(),end:0,paused:false,left:0,timer:null};
   $('#player').classList.remove('hide'); document.body.style.overflow='hidden';
   goStep(0);
+}
+function tap(el,fn){
+  if(!el) return; let last=0, sx=0, sy=0;
+  el.addEventListener('touchstart',e=>{const t=e.changedTouches[0]; sx=t.clientX; sy=t.clientY;},{passive:true});
+  el.addEventListener('touchend',e=>{const t=e.changedTouches[0]; if(Math.abs(t.clientX-sx)>20||Math.abs(t.clientY-sy)>20) return; e.preventDefault(); last=Date.now(); fn(el);},{passive:false});
+  el.addEventListener('click',()=>{ if(Date.now()-last<700) return; fn(el); });
 }
 function goStep(i){
   clearInterval(PL.timer);
@@ -655,7 +690,7 @@ function drawStep(){
    <div class="top"><button class="x" id="pX" style="color:inherit">✕</button><div class="small"><b>${esc(PL.w.n)}</b></div><div class="small mut">${PL.i+1}/${PL.st.length}</div></div>
    <div class="prog"><i style="width:${pr}%"></i></div>
    <div class="stage">
-    <div class="mut small" style="margin-bottom:6px">${rest?(esc(s.tag)+(x?' · Sigue: <b style="color:#fff">'+x.n+'</b>':'')):esc(s.tag||'')}</div>
+    <div class="mut small" style="margin-bottom:6px">${rest?(esc(s.tag)+(x?' · Sigue: <b>'+x.n+'</b>':'')):esc(s.tag||'')}</div>
     <div class="anim" id="pA"></div>
     <h2>${rest?(s.tag==='Prepárate'?'Prepárate':'Descansa'):x.n}</h2>
     ${target}
@@ -666,12 +701,13 @@ function drawStep(){
     ${rest?`<button class="btn w" id="p15" style="flex:0 0 80px">+15s</button><button class="btn" id="pN">Saltar</button>`
      : s.reps?`<button class="btn" id="pN">Hecho ✓</button>`:`<button class="btn w" id="pP" style="flex:0 0 96px">Pausa</button><button class="btn" id="pN">Siguiente</button>`}
    </div>`;
-  if(x) mountAnim($('#pA'),show.ex,rest); else $('#pA').classList.add('hide');
-  $('#pX').onclick=()=>{ if(confirm('¿Salir del entrenamiento? No se guardará.')) closePlayer(); };
-  $('#pB').onclick=()=>goStep(PL.i-1);
-  $('#pN').onclick=()=>goStep(PL.i+1);
-  if($('#p15')) $('#p15').onclick=()=>{PL.end+=15000; tick();};
-  if($('#pP')) $('#pP').onclick=e=>{ if(!PL.paused){PL.paused=true;PL.left=PL.end-Date.now();e.target.textContent='Seguir';} else {PL.paused=false;PL.end=Date.now()+PL.left;e.target.textContent='Pausa';} };
+  if(x) mountAnim($('#pA'),show.ex,rest?!isDark():isDark()); else $('#pA').classList.add('hide');
+  const my=PL.i;
+  tap($('#pX'),()=>{ if(confirm('¿Salir del entrenamiento? No se guardará.')) closePlayer(); });
+  tap($('#pB'),()=>{ if(PL&&PL.i===my) goStep(my-1); });
+  tap($('#pN'),()=>{ if(PL&&PL.i===my) goStep(my+1); });
+  tap($('#p15'),()=>{PL.end+=15000; tick();});
+  tap($('#pP'),b=>{ if(!PL.paused){PL.paused=true;PL.left=PL.end-Date.now();b.textContent='Seguir';} else {PL.paused=false;PL.end=Date.now()+PL.left;b.textContent='Pausa';} });
 }
 function finish(){
   clearInterval(PL.timer); beep(3,1046);
@@ -682,10 +718,10 @@ function finish(){
    <div class="rate" style="width:100%">${['Fácil','Bien','Muy duro'].map(r=>`<button data-r="${r}">${r}</button>`).join('')}</div>
    <p class="small mut" id="rMsg" style="min-height:40px"></p></div>
    <button class="btn" id="pSave">Guardar</button>`;
-  P.querySelectorAll('.rate button').forEach(b=>b.onclick=()=>{ rate=b.dataset.r; P.querySelectorAll('.rate button').forEach(x=>x.classList.toggle('on',x===b));
+  P.querySelectorAll('.rate button').forEach(b=>tap(b,()=>{ rate=b.dataset.r; P.querySelectorAll('.rate button').forEach(x=>x.classList.toggle('on',x===b));
     $('#rMsg').textContent= rate==='Fácil'?'Bien. Si se repite varias veces, haz cada repetición más lenta y controlada; la fase subirá sola con las semanas.'
-      : rate==='Muy duro'?'Ok. Si se repite, puedes quedarte en la fase anterior desde Ajustes. Descansa y duerme bien.':'Perfecto, esa es la intensidad que buscamos.'; });
-  $('#pSave').onclick=()=>{ S.sessions.push({d:todayStr(),id:PL.w.id,n:PL.w.n,mins,rate}); save(); closePlayer(); tab='inicio'; render(); };
+      : rate==='Muy duro'?'Ok. Si se repite, puedes quedarte en la fase anterior desde Ajustes. Descansa y duerme bien.':'Perfecto, esa es la intensidad que buscamos.'; }));
+  let saved=false; tap($('#pSave'),()=>{ if(saved) return; saved=true; S.sessions.push({d:todayStr(),id:PL.w.id,n:PL.w.n,mins,rate}); save(); closePlayer(); tab='inicio'; render(); });
 }
 function closePlayer(){ clearInterval(PL&&PL.timer); PL=null; $('#player').classList.add('hide'); $('#player').innerHTML=''; document.body.style.overflow=''; try{wakeLock&&wakeLock.release();}catch(e){} }
 
