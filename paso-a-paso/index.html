@@ -183,8 +183,7 @@ function figureShapes(ex,pose,dark){
   const w=ex.w, sh=[ln([0,201],[240,201],dark?'#444':'#d0d0d0',2), ...props(ex.props,dark)];
   const db=(p,c)=>{sh.push(['circle',{cx:p[0],cy:p[1],r:6.5,fill:c}]); sh.push(['circle',{cx:p[0],cy:p[1],r:2.2,fill:hole}]);};
   const limbS=(L,c,isLeg)=>{sh.push(ln(isLeg?F.hip:F.sho,L[0],c,W), ln(L[0],L[1],c,W)); if(isLeg) sh.push(ln(L[1],L[2],c,W-1));};
-  limbS(F.legs[1],bk,1); limbS(F.arms[1],bk,0);
-  if(w===true||(Array.isArray(w)&&w[1])) db(F.arms[1][1],bk);
+  limbS(F.legs[1],bk,1);
   sh.push(ln(F.hip,F.neck,fg,W+2), ['circle',{cx:F.head[0],cy:F.head[1],r:10.5,fill:fg}]);
   limbS(F.legs[0],fg,1); limbS(F.arms[0],fg,0);
   if(w===true||(Array.isArray(w)&&w[0])) db(F.arms[0][1],fg);
@@ -224,8 +223,8 @@ function mountAnim(el,exId,dark){ const ex=EX[exId]; if(!ex) return; const a={el
   requestAnimationFrame(loop);
 })(performance.now());
 
-/* ---------- Biblioteca de ejercicios (adaptados: rodillas siempre estiradas, un brazo) ---------- */
-// Brazo de atrás (gris) = brazo recogido; se mueve junto con el tronco.
+/* ---------- Biblioteca de ejercicios (rodillas siempre estiradas) ---------- */
+// El segundo brazo no se dibuja (HIDE_ARM2).
 const RC=(t=180)=>({a:15+(t-180),b:150+(t-180)});
 const ST=(o)=>Object.assign({hip:[120,128],torso:180,arms:[{a:6,b:6},RC()],legs:[{a:0,b:0,f:90},{a:-1,b:-1,f:90}]},o);
 const EX={
@@ -235,39 +234,39 @@ const EX={
      ST({hip:[120,128],arms:[{a:2,b:6},RC()]}),
      ST({hip:[120,131.5],arms:[{a:25,b:40},RC()],legs:[{a:-18,b:-18,f:90},{a:18,b:18,f:90}]})]},
  marcha_recta:{n:'Marcha con piernas rectas',u:'secs',dur:600,hold:.05,
-  c:['Junto a un mueble firme por si necesitas apoyo.','Levanta una pierna estirada un poco hacia adelante, luego la otra.','Mueve el brazo bueno al ritmo.'],
+  c:['Junto a un mueble firme por si necesitas apoyo.','Levanta una pierna estirada un poco hacia adelante, luego la otra.','Mueve el brazo al ritmo.'],
   f:[ST({arms:[{a:-25,b:-10},RC()],legs:[{a:24,b:24,f:90},{a:-1,b:-1,f:90}]}), ST({arms:[{a:30,b:60},RC()],legs:[{a:0,b:0,f:90},{a:24,b:24,f:90}]})]},
- boxeo1:{n:'Golpes al aire (un brazo)',u:'secs',dur:380,hold:.05,
-  c:['Pies separados, firmes en el suelo.','Golpea al frente con el brazo bueno y vuelve a la guardia.','Ritmo rápido pero controlado.'],
+ boxeo1:{n:'Golpes al aire',u:'secs',dur:380,hold:.05,
+  c:['Pies separados, firmes en el suelo.','Golpea al frente y vuelve a la guardia.','Ritmo rápido pero controlado.'],
   f:[ST({hip:[120,129.1],torso:178,arms:[{a:25,b:160},RC(178)],legs:[{a:10,b:10,f:90},{a:-10,b:-10,f:90}]}),
      ST({hip:[120,129.1],torso:174,arms:[{a:84,b:86},RC(174)],legs:[{a:10,b:10,f:90},{a:-10,b:-10,f:90}]})]},
- circulos_brazo:{n:'Círculos con el brazo bueno',u:'secs',dur:450,hold:0,jump:true,seq:[0,1,2,3,4],
+ circulos_brazo:{n:'Círculos de brazo',u:'secs',dur:450,hold:0,jump:true,seq:[0,1,2,3,4],
   c:['Brazo estirado.','Círculos grandes y lentos hacia adelante.','Respira profundo.'],
   f:[0,90,180,270,360].map(A=>ST({arms:[{a:A,b:A},RC()]}))},
  pierna_frente:{n:'Pierna recta al frente',u:'reps',side:1,dur:1500,
-  c:['Apóyate con la mano buena en un mueble firme a tu lado.','Sube la pierna estirada hacia adelante, sin balancearte.','Baja lento. Luego cambia de pierna.'],
+  c:['Apóyate con una mano en un mueble firme a tu lado.','Sube la pierna estirada hacia adelante, sin balancearte.','Baja lento. Luego cambia de pierna.'],
   f:[ST({}), ST({torso:182,legs:[{a:28,b:28,f:90},{a:-1,b:-1,f:90}]})]},
  pierna_atras:{n:'Pierna recta atrás',u:'reps',side:1,dur:1500,
-  c:['Apóyate con la mano buena en un mueble firme.','Lleva la pierna estirada hacia atrás apretando el glúteo.','Espalda recta, sin arquearla.'],
+  c:['Apóyate con una mano en un mueble firme.','Lleva la pierna estirada hacia atrás apretando el glúteo.','Espalda recta, sin arquearla.'],
   f:[ST({}), ST({torso:173,arms:[{a:2,b:2},RC(173)],legs:[{a:-24,b:-24,f:90},{a:-1,b:-1,f:90}]})]},
  talones:{n:'Elevación de talones',u:'reps',dur:1200,
   c:['Apóyate en un mueble firme.','Sube en punta de pies.','Baja lento los talones.'],
   f:[ST({}), ST({hip:[120,120],legs:[{a:0,b:0,f:43},{a:-1,b:-1,f:43}]})]},
  bisagra:{n:'Inclinación de cadera',u:'reps',dur:1600,
-  c:['Piernas estiradas, mano buena apoyada en el muslo.','Inclina el tronco adelante llevando la cadera atrás, espalda recta.','Solo hasta donde sientas estirar atrás de los muslos. Sube lento.'],
+  c:['Piernas estiradas, mano apoyada en el muslo.','Inclina el tronco adelante llevando la cadera atrás, espalda recta.','Solo hasta donde sientas estirar atrás de los muslos. Sube lento.'],
   f:[ST({legs:[{t:[122,200],k:1,f:90},{t:[118,200],k:1,f:90}]}),
      ST({hip:[109.5,129.1],torso:138,arms:[{a:-22,b:-30},RC(138)],legs:[{t:[122,200],k:1,f:90},{t:[118,200],k:1,f:90}]})]},
- curl1:{n:'Curl con el brazo bueno',u:'reps',w:[1,0],dur:1200,
+ curl1:{n:'Curl de bíceps',u:'reps',w:[1,0],dur:1200,
   c:['Espalda apoyada en la pared si quieres más estabilidad.','Codo pegado al cuerpo, sube el peso.','Baja lento.'],
   f:[ST({}), ST({arms:[{a:4,b:160},RC()]})]},
- press1:{n:'Press de hombro (un brazo)',u:'reps',w:[1,0],dur:1300,
+ press1:{n:'Press de hombro',u:'reps',w:[1,0],dur:1300,
   c:['De pie, abdomen firme.','Empuja el peso hacia arriba.','Baja hasta la altura de la oreja.'],
   f:[ST({arms:[{a:22,b:176},RC()]}), ST({arms:[{a:178,b:179},RC()]})]},
- frontal1:{n:'Elevación frontal (un brazo)',u:'reps',w:[1,0],dur:1400,
+ frontal1:{n:'Elevación frontal',u:'reps',w:[1,0],dur:1400,
   c:['Brazo estirado frente al muslo.','Súbelo hasta la altura del hombro.','Baja controlado.'],
   f:[ST({}), ST({arms:[{a:90,b:90},RC()]})]},
- empuje_pared:{n:'Empuje en la pared (un brazo)',u:'reps',props:['wall'],dur:1400,
-  c:['Frente a la pared, mano buena a la altura del pecho.','Cuerpo recto, inclínate hacia la pared doblando el codo.','Empuja para volver. Mientras más cerca de la pared, más fácil.'],
+ empuje_pared:{n:'Empuje en la pared',u:'reps',props:['wall'],dur:1400,
+  c:['Frente a la pared, mano a la altura del pecho.','Cuerpo recto, inclínate hacia la pared doblando el codo.','Empuja para volver. Mientras más cerca de la pared, más fácil.'],
   f:[ST({hip:[125,129.6],torso:168,arms:[{t:[182,92],k:-1},RC(168)],legs:[{a:-12,b:-12,f:90},{a:-13,b:-13,f:90}]}),
      ST({hip:[134.6,132.3],torso:160,arms:[{t:[182,92],k:-1},RC(160)],legs:[{a:-20,b:-20,f:90},{a:-21,b:-21,f:90}]})]},
 };
@@ -365,7 +364,7 @@ function render(){
 
 function onboarding(){
   view.innerHTML=`
-  <div class="card dark"><h2>Bienvenido 👊</h2><p class="mut small" style="margin:0">Plan de 1 año para bajar de peso con ejercicios de pie, sin doblar las rodillas y usando un solo brazo. Cada ejercicio tiene su demostración animada. Todo se guarda solo en este teléfono.</p></div>
+  <div class="card dark"><h2>Bienvenido 👊</h2><p class="mut small" style="margin:0">Plan de 1 año para bajar de peso con ejercicios de pie y sin doblar las rodillas. Cada ejercicio tiene su demostración animada. Todo se guarda solo en este teléfono.</p></div>
   <div class="card">
    <label>Tu nombre</label><input id="o_n" placeholder="Nombre">
    <div class="grid2"><div><label>Estatura (cm)</label><input id="o_h" type="text" inputmode="decimal" placeholder="Ej: 170"></div>
