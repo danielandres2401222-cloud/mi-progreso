@@ -746,6 +746,7 @@ function ajustes(){
   const p=S.profile;
   view.innerHTML=`
   <div class="card"><h2>Apariencia</h2><div class="seg" id="thSeg"><button data-t="light" class="${isDark()?'':'on'}">☀ Claro</button><button data-t="dark" class="${isDark()?'on':''}">☾ Nocturno</button></div>
+   <label>Fluidez de animaciones</label><div class="seg" id="fpsSeg" style="margin-top:8px">${[['30','30 FPS · ahorra batería'],['60','60 FPS · más fluido']].map(([k,n])=>`<button data-fps="${k}" class="${(localStorage.getItem('fps')||'60')===k?'on':''}">${n}</button>`).join('')}</div>
    <label>Fondo animado</label><div class="seg" id="fxSeg">${[['ondas','Ondas'],['constelacion','Constelación'],['pesas','Pesas'],['none','Ninguno']].map(o=>`<button data-f="${o[0]}" class="${(document.documentElement.dataset.fx||'ondas')===o[0]?'on':''}">${o[1]}</button>`).join('')}</div></div>
   <div class="card"><h2>Nivel de entrenamiento</h2><div class="seg" id="lvSeg"><button data-l="normal" class="${level()==='normal'?'on':''}">Normal</button><button data-l="exigente" class="${level()==='exigente'?'on':''}">Exigente</button></div>
    <p class="small mut">Exigente: flexiones en el suelo, sentadilla búlgara, burpees sin salto, swing, más series y menos descanso. Sin saltos, para cuidar rodillas y tobillos.</p></div>
@@ -764,6 +765,7 @@ function ajustes(){
   ${installHint()}`;
   document.querySelectorAll('#lvSeg button').forEach(b=>b.onclick=()=>{S.settings.level=b.dataset.l; save(); render();});
   document.querySelectorAll('#thSeg button').forEach(b=>b.onclick=()=>setTheme(b.dataset.t));
+  document.querySelectorAll('[data-fps]').forEach(b=>b.onclick=()=>{try{localStorage.setItem('fps',b.dataset.fps)}catch(_){}document.querySelectorAll('[data-fps]').forEach(y=>y.classList.toggle('on',y===b))});
   document.querySelectorAll('#fxSeg button').forEach(b=>b.onclick=()=>{ BG.set(b.dataset.f); document.querySelectorAll('#fxSeg button').forEach(x=>x.classList.toggle('on',x===b)); });
   $('#a_ok').onclick=()=>{ const g=num($('#a_g').value), w=num($('#a_w').value); if(!g||!w||g>=w){alert('La meta debe ser menor al peso inicial.');return;}
     Object.assign(p,{name:$('#a_n').value.trim(),height:num($('#a_h').value)||p.height,age:num($('#a_a').value),startWeight:w,goal:g,start:$('#a_s').value||p.start}); save(); alert('Guardado'); render(); };
@@ -880,7 +882,7 @@ const BG=(()=>{
     rr(-14,-1.6,28,3.2,1.6); rr(-13,-8,5,16,2); rr(8,-8,5,16,2); rr(-17,-5.5,3.5,11,1.5); rr(13.5,-5.5,3.5,11,1.5);
     ctx.restore();
   }
-  function draw(now){
+  function draw(now,k=1){
     ctx.clearRect(0,0,W,H); const m=mode(), t=now/1000;
     if(m==='ondas'){
       for(let k=0;k<5;k++){
@@ -889,18 +891,19 @@ const BG=(()=>{
         ctx.strokeStyle=ink(.22+k*.05); ctx.lineWidth=2.2; ctx.stroke();
       }
     } else if(m==='constelacion'){
-      for(const p of parts){ p.x+=p.vx; p.y+=p.vy; if(p.x<-10)p.x=W+10; if(p.x>W+10)p.x=-10; if(p.y<-10)p.y=H+10; if(p.y>H+10)p.y=-10; }
+      for(const p of parts){ p.x+=p.vx*k; p.y+=p.vy*k; if(p.x<-10)p.x=W+10; if(p.x>W+10)p.x=-10; if(p.y<-10)p.y=H+10; if(p.y>H+10)p.y=-10; }
       ctx.lineWidth=1;
       for(let i=0;i<parts.length;i++) for(let j=i+1;j<parts.length;j++){ const a=parts[i],b=parts[j],d=Math.hypot(a.x-b.x,a.y-b.y); if(d<110){ ctx.strokeStyle=ink(.28*(1-d/110)); ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); } }
       ctx.fillStyle=ink(.45); for(const p of parts){ ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fill(); }
     } else if(m==='pesas'){
-      for(const p of parts){ p.y-=p.v; p.a+=p.va; p.x+=Math.sin(t*.4+p.s*5)*.12; if(p.y<-30){p.y=H+30;p.x=Math.random()*W;} dumbbell(p.x,p.y,p.a,p.s*1.3,ink(.16+p.s*.06)); }
+      for(const p of parts){ p.y-=p.v*k; p.a+=p.va*k; p.x+=Math.sin(t*.4+p.s*5)*.12*k; if(p.y<-30){p.y=H+30;p.x=Math.random()*W;} dumbbell(p.x,p.y,p.a,p.s*1.3,ink(.16+p.s*.06)); }
     }
   }
   function loop(now){
     if(!running) return;
     const busy = document.hidden || (typeof PL!=='undefined' && PL) || mode()==='none';
-    if(!busy && now-last>33){ last=now; draw(now); }
+    const iv=(localStorage.getItem('fps')||'60')==='60'?12:33;
+    if(!busy && now-last>iv){ const k=Math.min(2,(now-last)/33.3); last=now; draw(now,k); }
     requestAnimationFrame(loop);
   }
   function start(){ if(running) return; running=true; requestAnimationFrame(loop); }
