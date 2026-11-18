@@ -8,7 +8,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Mi Progreso">
-<script>try{if(localStorage.getItem("tema")==="dark")document.documentElement.dataset.theme="dark";}catch(e){}</script>
+<script>try{if(localStorage.getItem("tema")==="dark")document.documentElement.dataset.theme="dark";document.documentElement.dataset.fx=localStorage.getItem("fondo")||"ondas";}catch(e){}</script>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icono-pesa-180.png">
 <link rel="icon" href="icono-pesa-192.png">
@@ -104,10 +104,18 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--fg)}
 .rate button.on{background:var(--fg);color:var(--bg)}
 .modal{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.6);display:flex;align-items:flex-end}
 .modal .sheet{background:var(--bg);color:var(--fg);width:100%;max-width:560px;margin:0 auto;border-radius:20px 20px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}
+
+#bgfx{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none}
+main{position:relative;z-index:1}
+html[data-fx]:not([data-fx=none]) .card{background:var(--softA);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+html[data-fx]:not([data-fx=none]) .card.dark{background:var(--fg)}
+:root{--softA:rgba(244,244,244,.66)}
+html[data-theme=dark]{--softA:rgba(24,24,24,.62)}
 </style>
 </head>
 <body>
 <header><h1>MI PROGRESO</h1><div class="hr"><span class="badge" id="wkBadge"></span><button id="thBtn" aria-label="Claro / Nocturno"></button></div></header>
+<canvas id="bgfx" aria-hidden="true"></canvas>
 <main id="view"></main>
 <nav id="nav">
  <button data-t="inicio" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</button>
@@ -409,7 +417,7 @@ const $=s=>document.querySelector(s);
 const view=$('#view');
 let tab='inicio';
 const isDark=()=>document.documentElement.dataset.theme==='dark';
-function setTheme(t){ document.documentElement.dataset.theme=t; try{localStorage.setItem('tema',t);}catch(e){} render(); }
+function setTheme(t){ document.documentElement.dataset.theme=t; try{localStorage.setItem('tema',t);}catch(e){} render(); try{BG.redraw();}catch(e){} }
 function syncThemeBtn(){ const b=document.getElementById('thBtn'); if(b){ b.textContent=isDark()?'☀':'☾'; b.onclick=()=>setTheme(isDark()?'light':'dark'); } }
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
@@ -617,7 +625,8 @@ function weightForm(){
 function ajustes(){
   const p=S.profile;
   view.innerHTML=`
-  <div class="card"><h2>Apariencia</h2><div class="seg" id="thSeg"><button data-t="light" class="${isDark()?'':'on'}">☀ Claro</button><button data-t="dark" class="${isDark()?'on':''}">☾ Nocturno</button></div></div>
+  <div class="card"><h2>Apariencia</h2><div class="seg" id="thSeg"><button data-t="light" class="${isDark()?'':'on'}">☀ Claro</button><button data-t="dark" class="${isDark()?'on':''}">☾ Nocturno</button></div>
+   <label>Fondo animado</label><div class="seg" id="fxSeg">${[['ondas','Ondas'],['constelacion','Constelación'],['pesas','Pesas'],['none','Ninguno']].map(o=>`<button data-f="${o[0]}" class="${(document.documentElement.dataset.fx||'ondas')===o[0]?'on':''}">${o[1]}</button>`).join('')}</div></div>
   <div class="card"><h2>Perfil y meta</h2>
    <label>Nombre</label><input id="a_n" value="${esc(p.name)}">
    <div class="grid2"><div><label>Estatura (cm)</label><input id="a_h" type="text" inputmode="decimal" value="${numStr(p.height)}"></div><div><label>Edad</label><input id="a_a" type="text" inputmode="decimal" value="${p.age||''}"></div></div>
@@ -632,6 +641,7 @@ function ajustes(){
   <div class="card"><h2>Borrar todo</h2><button class="btn w" id="a_rst">Borrar mis datos</button></div>
   ${installHint()}`;
   document.querySelectorAll('#thSeg button').forEach(b=>b.onclick=()=>setTheme(b.dataset.t));
+  document.querySelectorAll('#fxSeg button').forEach(b=>b.onclick=()=>{ BG.set(b.dataset.f); document.querySelectorAll('#fxSeg button').forEach(x=>x.classList.toggle('on',x===b)); });
   $('#a_ok').onclick=()=>{ const g=num($('#a_g').value), w=num($('#a_w').value); if(!g||!w||g>=w){alert('La meta debe ser menor al peso inicial.');return;}
     Object.assign(p,{name:$('#a_n').value.trim(),height:num($('#a_h').value)||p.height,age:num($('#a_a').value),startWeight:w,goal:g,start:$('#a_s').value||p.start}); save(); alert('Guardado'); render(); };
   $('#a_p').onchange=e=>{S.settings.phaseOverride=e.target.value===''?null:+e.target.value; save(); render();};
@@ -725,6 +735,57 @@ function finish(){
 }
 function closePlayer(){ clearInterval(PL&&PL.timer); PL=null; $('#player').classList.add('hide'); $('#player').innerHTML=''; document.body.style.overflow=''; try{wakeLock&&wakeLock.release();}catch(e){} }
 
+
+/* =========================================================
+   FONDO ANIMADO
+   ========================================================= */
+const BG=(()=>{
+  const cv=document.getElementById('bgfx'), ctx=cv.getContext('2d');
+  let W=0,H=0,dpr=1,parts=[],last=0,running=false;
+  const mode=()=>document.documentElement.dataset.fx||'ondas';
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+  function size(){ dpr=Math.min(2,window.devicePixelRatio||1); W=innerWidth; H=innerHeight; cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); seed(); draw(performance.now()); }
+  function seed(){
+    const m=mode(); parts=[];
+    if(m==='constelacion'){ const n=Math.round(Math.min(60,W*H/9000)); for(let i=0;i<n;i++) parts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18,r:1+Math.random()*1.6}); }
+    if(m==='pesas'){ const n=Math.round(Math.min(16,W*H/26000)); for(let i=0;i<n;i++) parts.push({x:Math.random()*W,y:Math.random()*H,v:.12+Math.random()*.25,a:Math.random()*6.28,va:(Math.random()-.5)*.006,s:.6+Math.random()*.9}); }
+  }
+  const ink=a=>(document.documentElement.dataset.theme==='dark'?`rgba(255,255,255,${a})`:`rgba(0,0,0,${a})`);
+  function dumbbell(x,y,a,s,c){
+    ctx.save(); ctx.translate(x,y); ctx.rotate(a); ctx.scale(s,s); ctx.fillStyle=c;
+    const rr=(x,y,w,h,r)=>{ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(x,y,w,h,r); else ctx.rect(x,y,w,h); ctx.fill();};
+    rr(-14,-1.6,28,3.2,1.6); rr(-13,-8,5,16,2); rr(8,-8,5,16,2); rr(-17,-5.5,3.5,11,1.5); rr(13.5,-5.5,3.5,11,1.5);
+    ctx.restore();
+  }
+  function draw(now){
+    ctx.clearRect(0,0,W,H); const m=mode(), t=now/1000;
+    if(m==='ondas'){
+      for(let k=0;k<5;k++){
+        ctx.beginPath(); const base=H*(.12+k*.2), amp=18+k*7, f=.006-k*.0006, sp=.25+k*.08;
+        for(let x=0;x<=W+10;x+=8){ const y=base+Math.sin(x*f+t*sp+k*1.3)*amp+Math.sin(x*f*2.1-t*sp*.7)*amp*.35; x?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+        ctx.strokeStyle=ink(.22+k*.05); ctx.lineWidth=2.2; ctx.stroke();
+      }
+    } else if(m==='constelacion'){
+      for(const p of parts){ p.x+=p.vx; p.y+=p.vy; if(p.x<-10)p.x=W+10; if(p.x>W+10)p.x=-10; if(p.y<-10)p.y=H+10; if(p.y>H+10)p.y=-10; }
+      ctx.lineWidth=1;
+      for(let i=0;i<parts.length;i++) for(let j=i+1;j<parts.length;j++){ const a=parts[i],b=parts[j],d=Math.hypot(a.x-b.x,a.y-b.y); if(d<110){ ctx.strokeStyle=ink(.28*(1-d/110)); ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); } }
+      ctx.fillStyle=ink(.45); for(const p of parts){ ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fill(); }
+    } else if(m==='pesas'){
+      for(const p of parts){ p.y-=p.v; p.a+=p.va; p.x+=Math.sin(t*.4+p.s*5)*.12; if(p.y<-30){p.y=H+30;p.x=Math.random()*W;} dumbbell(p.x,p.y,p.a,p.s*1.3,ink(.16+p.s*.06)); }
+    }
+  }
+  function loop(now){
+    if(!running) return;
+    const busy = document.hidden || (typeof PL!=='undefined' && PL) || mode()==='none';
+    if(!busy && now-last>33){ last=now; draw(now); }
+    requestAnimationFrame(loop);
+  }
+  function start(){ if(running) return; running=true; requestAnimationFrame(loop); }
+  function set(m){ document.documentElement.dataset.fx=m; try{localStorage.setItem('fondo',m);}catch(e){} seed(); ctx.clearRect(0,0,W,H); if(m!=='none') draw(performance.now()); }
+  addEventListener('resize',size);
+  size(); if(!reduce.matches) start();
+  return {set,mode,redraw:()=>draw(performance.now())};
+})();
 render();
 if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
