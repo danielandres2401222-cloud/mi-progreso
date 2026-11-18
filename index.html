@@ -363,6 +363,8 @@ function estMin(w){ return Math.round(steps(w).reduce((a,s)=>a+(s.secs||(s.reps?
    ========================================================= */
 const KEY='miprogreso_v1';
 const pad=n=>String(n).padStart(2,'0');
+const num=v=>parseFloat(String(v??'').trim().replace(',','.'));
+const numStr=v=>String(v).replace('.',',');
 const ds=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 const todayStr=()=>ds(new Date());
 const parse=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c);};
@@ -401,20 +403,20 @@ function onboarding(){
   <div class="card dark"><h2>Bienvenido 👊</h2><p class="mut small" style="margin:0">Plan de 1 año en casa con 2 mancuernas, historial de peso y rutinas con demostración animada. Todo se guarda solo en este teléfono.</p></div>
   <div class="card">
    <label>Tu nombre</label><input id="o_n" value="Daniel">
-   <div class="grid2"><div><label>Estatura (cm)</label><input id="o_h" type="number" inputmode="decimal" value="174"></div>
-   <div><label>Edad</label><input id="o_a" type="number" inputmode="numeric" value="22"></div></div>
-   <div class="grid2"><div><label>Peso actual (kg)</label><input id="o_w" type="number" inputmode="decimal" step="0.1" value="120"></div>
-   <div><label>Meta (kg)</label><input id="o_g" type="number" inputmode="decimal" step="0.1" value="80"></div></div>
+   <div class="grid2"><div><label>Estatura (cm)</label><input id="o_h" type="text" inputmode="decimal" value="174"></div>
+   <div><label>Edad</label><input id="o_a" type="text" inputmode="decimal" value="22"></div></div>
+   <div class="grid2"><div><label>Peso actual (kg)</label><input id="o_w" type="text" inputmode="decimal" value="120"></div>
+   <div><label>Meta (kg)</label><input id="o_g" type="text" inputmode="decimal" value="80"></div></div>
    <label>Inicio del plan</label><input id="o_s" type="date" value="${todayStr()}">
    <p class="small mut">Puedes cambiar la meta cuando quieras en Ajustes.</p>
    <button class="btn" id="o_go">Empezar mi plan</button>
   </div>
   <div class="note">Antes de partir es recomendable un chequeo médico general. Detén el ejercicio si sientes dolor en el pecho, mareo o falta de aire fuera de lo normal.</div>`;
   $('#o_go').onclick=()=>{
-    const w=+$('#o_w').value, h=+$('#o_h').value, g=+$('#o_g').value;
+    const w=num($('#o_w').value), h=num($('#o_h').value), g=num($('#o_g').value);
     if(!w||!h||!g||g>=w){alert('Revisa estatura, peso y meta (la meta debe ser menor al peso actual).');return;}
     const st=$('#o_s').value||todayStr();
-    S={profile:{name:$('#o_n').value.trim(),height:h,age:+$('#o_a').value,startWeight:w,goal:g,start:st},weights:[{d:st,w,waist:null,note:'Inicio'}],sessions:[],settings:{sound:true,phaseOverride:null}};
+    S={profile:{name:$('#o_n').value.trim(),height:h,age:num($('#o_a').value),startWeight:w,goal:g,start:st},weights:[{d:st,w,waist:null,note:'Inicio'}],sessions:[],settings:{sound:true,phaseOverride:null}};
     save(); render();
   };
 }
@@ -571,16 +573,16 @@ function drawChart(){
 }
 function weightForm(){
   openModal(`<div class="row between"><h2 style="margin:0">Registrar peso</h2><button class="x" onclick="closeModal()">✕</button></div>
-   <div class="grid2"><div><label>Peso (kg)</label><input id="f_w" type="number" step="0.1" inputmode="decimal" value="${curW()}"></div>
+   <div class="grid2"><div><label>Peso (kg)</label><input id="f_w" type="text" inputmode="decimal" value="${numStr(curW())}"></div>
    <div><label>Fecha</label><input id="f_d" type="date" value="${todayStr()}"></div></div>
-   <label>Cintura en cm (opcional)</label><input id="f_c" type="number" inputmode="decimal" step="0.5" placeholder="A la altura del ombligo">
+   <label>Cintura en cm (opcional)</label><input id="f_c" type="text" inputmode="decimal" placeholder="A la altura del ombligo">
    <label>Nota (opcional)</label><input id="f_n" placeholder="Ej: semana con mucho estudio">
    <p class="small mut">Consejo: pésate siempre a la misma hora, idealmente en la mañana después de ir al baño. Es normal que el peso suba y baje un poco de un día a otro; importa la tendencia.</p>
    <button class="btn" id="f_ok">Guardar</button>`);
   $('#f_ok').onclick=()=>{
-    const w=parseFloat(String($('#f_w').value).replace(',','.')); if(!w||w<30||w>350){alert('Ingresa un peso válido.');return;}
+    const w=num($('#f_w').value); if(!w||w<30||w>350){alert('Ingresa un peso válido.');return;}
     const d=$('#f_d').value||todayStr(); S.weights=S.weights.filter(e=>e.d!==d);
-    const c=parseFloat($('#f_c').value); S.weights.push({d,w,waist:isNaN(c)?null:c,note:$('#f_n').value.trim()}); save(); closeModal(); render();
+    const c=num($('#f_c').value); S.weights.push({d,w,waist:isNaN(c)?null:c,note:$('#f_n').value.trim()}); save(); closeModal(); render();
   };
 }
 
@@ -590,8 +592,8 @@ function ajustes(){
   view.innerHTML=`
   <div class="card"><h2>Perfil y meta</h2>
    <label>Nombre</label><input id="a_n" value="${esc(p.name)}">
-   <div class="grid2"><div><label>Estatura (cm)</label><input id="a_h" type="number" value="${p.height}"></div><div><label>Edad</label><input id="a_a" type="number" value="${p.age||''}"></div></div>
-   <div class="grid2"><div><label>Peso inicial (kg)</label><input id="a_w" type="number" step="0.1" value="${p.startWeight}"></div><div><label>Meta (kg)</label><input id="a_g" type="number" step="0.1" value="${p.goal}"></div></div>
+   <div class="grid2"><div><label>Estatura (cm)</label><input id="a_h" type="text" inputmode="decimal" value="${numStr(p.height)}"></div><div><label>Edad</label><input id="a_a" type="text" inputmode="decimal" value="${p.age||''}"></div></div>
+   <div class="grid2"><div><label>Peso inicial (kg)</label><input id="a_w" type="text" inputmode="decimal" value="${numStr(p.startWeight)}"></div><div><label>Meta (kg)</label><input id="a_g" type="text" inputmode="decimal" value="${numStr(p.goal)}"></div></div>
    <label>Inicio del plan</label><input id="a_s" type="date" value="${p.start}">
    <br><br><button class="btn" id="a_ok">Guardar cambios</button></div>
   <div class="card"><h2>Fase del plan</h2><p class="small mut" style="margin-top:0">Normalmente avanza sola según la semana. Si una fase te queda muy dura, puedes quedarte en la anterior un tiempo.</p>
@@ -601,8 +603,8 @@ function ajustes(){
    <div class="grid2"><button class="btn" id="a_exp">Descargar respaldo</button><button class="btn w" id="a_imp">Restaurar</button></div><input type="file" id="a_file" accept=".json,application/json" class="hide"></div>
   <div class="card"><h2>Borrar todo</h2><button class="btn w" id="a_rst">Borrar mis datos</button></div>
   ${installHint()}`;
-  $('#a_ok').onclick=()=>{ const g=+$('#a_g').value, w=+$('#a_w').value; if(!g||!w||g>=w){alert('La meta debe ser menor al peso inicial.');return;}
-    Object.assign(p,{name:$('#a_n').value.trim(),height:+$('#a_h').value||p.height,age:+$('#a_a').value,startWeight:w,goal:g,start:$('#a_s').value||p.start}); save(); alert('Guardado'); render(); };
+  $('#a_ok').onclick=()=>{ const g=num($('#a_g').value), w=num($('#a_w').value); if(!g||!w||g>=w){alert('La meta debe ser menor al peso inicial.');return;}
+    Object.assign(p,{name:$('#a_n').value.trim(),height:num($('#a_h').value)||p.height,age:num($('#a_a').value),startWeight:w,goal:g,start:$('#a_s').value||p.start}); save(); alert('Guardado'); render(); };
   $('#a_p').onchange=e=>{S.settings.phaseOverride=e.target.value===''?null:+e.target.value; save(); render();};
   $('#a_snd').onchange=e=>{S.settings.sound=e.target.checked; save();};
   $('#a_exp').onclick=()=>{ const b=new Blob([JSON.stringify(S,null,1)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='mi-progreso-respaldo-'+todayStr()+'.json'; document.body.appendChild(a); a.click(); a.remove(); };
