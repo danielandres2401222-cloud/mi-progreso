@@ -111,6 +111,19 @@ html[data-fx]:not([data-fx=none]) .card{background:var(--softA);-webkit-backdrop
 html[data-fx]:not([data-fx=none]) .card.dark{background:var(--fg)}
 :root{--softA:rgba(244,244,244,.66)}
 html[data-theme=dark]{--softA:rgba(24,24,24,.62)}
+
+@keyframes vin{from{opacity:0;transform:translateX(var(--dx,0px)) translateY(6px)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+@keyframes sheetup{from{transform:translateY(100%)}to{transform:none}}
+#view.enter{animation:vin .32s cubic-bezier(.2,.8,.2,1)}
+#view.enter>.card,#view.enter>.grid2,#view.enter>.grid3,#view.enter>.note{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+#view.enter>:nth-child(2){animation-delay:.04s}#view.enter>:nth-child(3){animation-delay:.08s}#view.enter>:nth-child(4){animation-delay:.12s}#view.enter>:nth-child(5){animation-delay:.16s}#view.enter>:nth-child(n+6){animation-delay:.2s}
+.modal:not(.hide){animation:fadein .2s}
+.modal:not(.hide) .sheet{animation:sheetup .32s cubic-bezier(.2,.8,.2,1)}
+#player .stage{animation:fadein .25s}
+.bar i{transition:width 1s cubic-bezier(.2,.8,.2,1)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -179,15 +192,21 @@ function props(list,dark){
   return out;
 }
 function figureShapes(ex,pose,dark){
-  const F=solve(pose), fg=dark?'#f2f2f2':'#0a0a0a', bk=dark?'#6d6d6d':'#a8a8a8', W=7, hole=dark?'#000':'#fff';
+  const F=solve(pose), fg=dark?'#f2f2f2':'#0a0a0a', bk=dark?'#6d6d6d':'#a8a8a8', hole=dark?'#000':'#fff';
   const w=ex.w, sh=[ln([0,201],[240,201],dark?'#444':'#d0d0d0',2), ...props(ex.props,dark)];
-  const db=(p,c)=>{sh.push(['circle',{cx:p[0],cy:p[1],r:6.5,fill:c}]); sh.push(['circle',{cx:p[0],cy:p[1],r:2.2,fill:hole}]);};
-  const limbS=(L,c,isLeg)=>{sh.push(ln(isLeg?F.hip:F.sho,L[0],c,W), ln(L[0],L[1],c,W)); if(isLeg) sh.push(ln(L[1],L[2],c,W-1));};
-  limbS(F.legs[1],bk,1);
-  sh.push(ln(F.hip,F.neck,fg,W+2), ['circle',{cx:F.head[0],cy:F.head[1],r:10.5,fill:fg}]);
-  limbS(F.legs[0],fg,1); limbS(F.arms[0],fg,0);
+  const db=(p,c)=>{sh.push(['rect',{x:p[0]-3,y:p[1]-8,width:6,height:16,rx:2,fill:c}]); sh.push(['circle',{cx:p[0],cy:p[1],r:2,fill:hole}]);};
+  const leg=(L,c)=>{ sh.push(ln(F.hip,L[0],c,10.5), ln(L[0],L[1],c,8), ln(L[1],L[2],c,6.5)); };
+  const arm=(A,c)=>{ sh.push(ln(F.sho,A[0],c,8), ln(A[0],A[1],c,6.5), ['circle',{cx:A[1][0],cy:A[1][1],r:4.6,fill:c}]); };
+  leg(F.legs[1],bk);
+  // tronco con volumen, cuello y cabeza con ojo
+  const ta=Math.atan2(F.neck[0]-F.hip[0],F.neck[1]-F.hip[1])/D2R, up=dir(ta,1), fw=dir(ta-90,1);
+  const chest=add(F.hip,dir(ta,LEN.torso-12));
+  sh.push(ln(F.hip,chest,fg,15), ln(chest,F.neck,fg,12), ['circle',{cx:F.sho[0],cy:F.sho[1],r:7,fill:fg}]);
+  sh.push(['circle',{cx:F.head[0],cy:F.head[1],r:11,fill:fg}]);
+  sh.push(['circle',{cx:F.head[0]+fw[0]*5.5+up[0]*1.5,cy:F.head[1]+fw[1]*5.5+up[1]*1.5,r:1.7,fill:hole}]);
+  leg(F.legs[0],fg); arm(F.arms[0],fg);
   if(w===true||(Array.isArray(w)&&w[0])) db(F.arms[0][1],fg);
-  if(w==='goblet'){const m=lerp(F.arms[0][1],F.arms[1][1],.5); sh.push(['rect',{x:m[0]-6,y:m[1]-11,width:12,height:22,rx:4,fill:fg}]);}
+  if(w==='goblet'){const m=lerp(F.arms[0][1],F.arms[1][1],.5); sh.push(['rect',{x:m[0]-6.5,y:m[1]-12,width:13,height:24,rx:4,fill:fg}]);}
   return sh;
 }
 const fmtA=v=>typeof v==='number'?v.toFixed(1):v;
@@ -346,12 +365,26 @@ const $=s=>document.querySelector(s);
 const view=$('#view');
 let tab='inicio';
 const isDark=()=>document.documentElement.dataset.theme==='dark';
-function setTheme(t){ document.documentElement.dataset.theme=t; try{localStorage.setItem('tema',t);}catch(e){} render(); try{BG.redraw();}catch(e){} }
+function setTheme(t){ document.documentElement.dataset.theme=t; try{localStorage.setItem('tema',t);}catch(e){} render(false); try{BG.redraw();}catch(e){} }
 function syncThemeBtn(){ const b=document.getElementById('thBtn'); if(b){ b.textContent=isDark()?'☀':'☾'; b.onclick=()=>setTheme(isDark()?'light':'dark'); } }
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});
+const TABS=['inicio','entrenar','progreso','ajustes'];
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{ const d=TABS.indexOf(b.dataset.t)-TABS.indexOf(tab); if(!d) return; view.style.setProperty('--dx',(d>0?18:-18)+'px'); tab=b.dataset.t; render(true);});
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
-function render(){
+
+/* números que suben animados */
+const fmtN=(v,d)=>Number(v).toLocaleString('es-CL',{minimumFractionDigits:d,maximumFractionDigits:d});
+function cnt(v,dec,suf){ v=Math.round((+v||0)*10)/10; const d=dec&&v%1!==0?1:0; return `<span data-n="${v}" data-d="${d}" data-s="${suf||''}">${fmtN(0,d)}${suf||''}</span>`; }
+function animateNumbers(){
+  const red=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('[data-n]').forEach(el=>{
+    const to=+el.dataset.n, d=+el.dataset.d, suf=el.dataset.s; if(red||!to){ el.textContent=fmtN(to,d)+suf; return; }
+    const t0=performance.now(), T=900;
+    (function step(now){ const k=Math.min(1,(now-t0)/T), e=1-Math.pow(1-k,3); el.textContent=fmtN(to*e,d)+suf; if(k<1&&el.isConnected) requestAnimationFrame(step); })(t0);
+  });
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('.bar i[data-w]').forEach(i=>i.style.width=i.dataset.w+'%')));
+}
+function render(anim){
   syncThemeBtn();
   if(!S){ $('#nav').classList.add('hide'); $('#wkBadge').textContent=''; return onboarding(); }
   $('#nav').classList.remove('hide');
@@ -360,6 +393,8 @@ function render(){
   $('#wkBadge').textContent='Semana '+w+' de 52 · '+PHASES[pi].n;
   ({inicio,entrenar,progreso,ajustes})[tab]();
   window.scrollTo(0,0);
+  if(anim!==false){ view.classList.remove('enter'); void view.offsetWidth; view.classList.add('enter'); setTimeout(()=>view.style.setProperty('--dx','0px'),400); }
+  animateNumbers();
 }
 
 function onboarding(){
@@ -407,16 +442,16 @@ function inicio(){
     <div class="row between"><h2>Peso</h2><button class="btn sm" id="addW">+ Registrar</button></div>
     <div class="row between" style="align-items:flex-end;margin:6px 0 12px">
       <div><div class="big">${kg(cw)}</div><div class="small mut">IMC ${bmi(cw).toFixed(1)}</div></div>
-      <div style="text-align:right"><b style="font-size:22px">${Math.abs(lost)<0.05?'':(lost>0?'−':'+')}${kg(Math.abs(lost))}</b><div class="small mut">desde el inicio</div></div>
+      <div style="text-align:right"><b style="font-size:22px">${Math.abs(lost)<0.05?'':(lost>0?'−':'+')}${cnt(Math.abs(lost),1,' kg')}</b><div class="small mut">desde el inicio</div></div>
     </div>
-    <div class="bar"><i style="width:${pct}%"></i></div>
-    <div class="row between small mut" style="margin-top:6px"><span>${kg(st)}</span><span>${pct.toFixed(0)}%</span><span>Meta ${kg(g)}</span></div>
+    <div class="bar"><i data-w="${pct}" style="width:0"></i></div>
+    <div class="row between small mut" style="margin-top:6px"><span>${kg(st)}</span><span>${cnt(pct,0,'%')}</span><span>Meta ${kg(g)}</span></div>
     ${next?`<div class="note">Próximo hito: <b>${kg(next)}</b> · te faltan ${kg(cw-next)}</div>`:`<div class="note"><b>¡Meta alcanzada!</b> Puedes fijar una nueva en Ajustes.</div>`}
   </div>
   <div class="grid3" style="margin-bottom:14px">
-    <div class="stat" style="background:var(--soft)"><b>${thisWeek}/${planned}</b><span>esta semana</span></div>
-    <div class="stat" style="background:var(--soft)"><b>${streak}</b><span>racha (días)</span></div>
-    <div class="stat" style="background:var(--soft)"><b>${S.sessions.length}</b><span>entrenamientos</span></div>
+    <div class="stat" style="background:var(--soft)"><b>${cnt(thisWeek)}/${planned}</b><span>esta semana</span></div>
+    <div class="stat" style="background:var(--soft)"><b>${cnt(streak)}</b><span>racha (días)</span></div>
+    <div class="stat" style="background:var(--soft)"><b>${cnt(S.sessions.length)}</b><span>entrenamientos</span></div>
   </div>
   ${installHint()}
   <div class="note mut">Si sientes dolor en el pecho, mareo o falta de aire fuera de lo normal, detente. Dolor muscular leve al día siguiente es normal; dolor en articulaciones no.</div>`;
@@ -489,7 +524,7 @@ function progreso(){
    <div class="small mut row" style="gap:14px;flex-wrap:wrap"><span>━ peso</span><span style="color:#999">┅ ritmo del plan</span><span>╌ meta</span></div>
   </div>
   <div class="grid2" style="margin-bottom:14px">
-   <div class="stat" style="background:var(--soft)"><b>${kg(st-cw)}</b><span>bajados</span></div>
+   <div class="stat" style="background:var(--soft)"><b>${cnt(st-cw,1,' kg')}</b><span>bajados</span></div>
    <div class="stat" style="background:var(--soft)"><b>${avg}</b><span>promedio semanal</span></div>
    <div class="stat" style="background:var(--soft)"><b>${bmi(cw).toFixed(1)}</b><span>IMC actual (inicio ${bmi(st).toFixed(1)})</span></div>
    <div class="stat" style="background:var(--soft)"><b>${kg(Math.max(0,cw-S.profile.goal))}</b><span>para la meta</span></div>
