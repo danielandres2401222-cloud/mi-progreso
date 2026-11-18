@@ -248,7 +248,7 @@ const EX={
   f:[ST({}), ST({hip:[100,136],torso:118,arms:[{a:2,b:2},{a:-2,b:-2}]})]},
  puente_gluteo:{n:'Puente de glúteo',u:'reps',props:['mat'],dur:1400,
   c:['Acostado boca arriba, pies apoyados.','Sube la cadera apretando glúteos.','Mantén 1 segundo arriba y baja lento.'],
-  f:[LY({}), LY({hip:[120,166]})]},
+  f:[LY({}), LY({hip:[120,166],neck:[72,186]})]},
  remo:{n:'Remo con mancuerna',u:'reps',side:1,w:[1,0],props:['chairFront'],dur:1300,
   c:['Apoya una mano en la silla, espalda recta.','Tira la pesa hacia la cadera llevando el codo atrás.','Baja controlado.'],
   f:[{hip:[100,132],torso:105,arms:[{a:0,b:0},{t:[167,166],k:-1}],legs:[{t:[122,200],k:1},{t:[92,200],k:1}]},
@@ -278,8 +278,8 @@ const EX={
  bicho_muerto:{n:'Bicho muerto',u:'reps',side:1,props:['mat'],dur:1100,seq:[0,1,0,2],
   c:['Boca arriba, brazos al techo, rodillas en 90°.','Estira un brazo atrás y la pierna contraria.','Espalda baja pegada al suelo.'],
   f:[LY({arms:[{a:180,b:180},{a:178,b:178}],legs:[{a:180,b:90},{a:178,b:88}]}),
-     LY({arms:[{a:-95,b:-95},{a:178,b:178}],legs:[{a:180,b:90},{a:96,b:96}]}),
-     LY({arms:[{a:180,b:180},{a:-97,b:-97}],legs:[{a:96,b:96},{a:178,b:88}]})]},
+     LY({arms:[{a:262,b:262},{a:178,b:178}],legs:[{a:180,b:90},{a:96,b:96}]}),
+     LY({arms:[{a:180,b:180},{a:260,b:260}],legs:[{a:96,b:96},{a:178,b:88}]})]},
  marcha:{n:'Marcha en el lugar',u:'secs',dur:520,hold:.05,
   c:['Sube las rodillas a la altura de la cadera.','Mueve los brazos al ritmo.','Mantén un ritmo que te haga respirar fuerte.'],
   f:[ST({hip:[120,128],arms:[{a:-30,b:-15},{a:40,b:80}],legs:[{a:72,b:2},{a:0,b:0}]}), ST({hip:[120,128],arms:[{a:40,b:80},{a:-30,b:-15}],legs:[{a:0,b:0},{a:72,b:2}]})]},
@@ -319,7 +319,7 @@ const EX={
    f:[{hip:[109.9,182.8],torso:103.8,arms:[{a:0,b:90},{a:-2,b:88}],legs:FL(-76.2)},{hip:[109.9,181.8],torso:103.8,arms:[{a:0,b:90},{a:-2,b:88}],legs:FL(-76.2)}]},
   escaladores_suelo:{n:'Escaladores',u:'secs',props:['mat'],dur:480,hold:.06,
    c:['Posición de flexión con brazos estirados.','Lleva una rodilla al pecho y luego la otra.','Cadera abajo, ritmo rápido y constante.'],
-   f:[Object.assign({arms:FH,legs:[{t:[100,193],k:1,f:150},{t:[42,200],k:1,f:150}]},PU0), Object.assign({arms:FH,legs:[{t:[42,200],k:1,f:150},{t:[98,193],k:1,f:150}]},PU0)]},
+   f:[{hip:[108,162],torso:108,arms:FH,legs:[{t:[112,192],k:1,f:150},{t:[42,200],k:1,f:150}]}, {hip:[108,162],torso:108,arms:FH,legs:[{t:[42,200],k:1,f:150},{t:[110,192],k:1,f:150}]}]},
   bulgara:{n:'Sentadilla búlgara',u:'reps',side:1,w:true,props:['chairBack'],dur:1500,
    c:['Pie de atrás sobre una silla firme, el de adelante lejos.','Baja recto hasta que el muslo de adelante quede casi horizontal.','Sube empujando con el talón de adelante.'],
    f:[{hip:[122,130],torso:178,arms:[{a:2,b:2},{a:-2,b:-2}],legs:[{t:[142,200],k:1,f:90},{t:[90,164],k:1,f:-80}]},
@@ -339,7 +339,7 @@ const EX={
   burpee:{n:'Burpee sin salto',u:'secs',props:['mat'],dur:650,hold:.1,seq:[0,1,2,1],
    c:['Agáchate y apoya las manos en el suelo.','Lleva los pies atrás a posición de flexión (de a uno si quieres).','Vuelve los pies y ponte de pie. Sin saltar.'],
    f:[{hip:[118,128],torso:180,arms:[{t:[126,172],k:1},{t:[120,172],k:1}],legs:[{t:[126,200],k:1,f:90},{t:[120,200],k:1,f:90}]},
-      {hip:[104,168],torso:125,arms:[{t:[152,199],k:-1},{t:[147,199],k:-1}],legs:[{t:[128,200],k:1,f:90},{t:[122,200],k:1,f:90}]},
+      {hip:[104,164],torso:125,arms:[{t:[152,199],k:-1},{t:[147,199],k:-1}],legs:[{t:[128,200],k:1,f:90},{t:[122,200],k:1,f:90}]},
       {hip:[105.1,169.2],torso:115.3,arms:[{t:[152,199],k:-1},{t:[147,199],k:-1}],legs:[{t:[40,200],k:1,f:150},{t:[44,200],k:1,f:150}]}]},
   });
 })();
@@ -355,7 +355,7 @@ function workoutX(id,pi){
   const P=PHX[pi];
   const str=(list)=>({type:'sets',items:list.map(e=>{const x=EX[e]; return {ex:e,sets:P.sets,reps:x.u==='secs'?0:P.reps,secs:x.u==='secs'?P.plank:0,rest:P.rest};})});
   if(id==='A') return Object.assign({id,n:'Fuerza A · Piernas y empuje'},str([pi<2?'sentadilla_goblet':'sentadilla_press','bulgara','flexion_suelo','zancada_peso','puente_gluteo','plancha_suelo']));
-  if(id==='B') return Object.assign({id,n:'Fuerza B · Espalda, hombros y core'},str(['peso_muerto','remo_dos','press_hombros','press_pecho_suelo','curl','bicho_muerto']));
+  if(id==='B') return Object.assign({id,n:'Fuerza B · Espalda, hombros y core'},str(['peso_muerto','remo_dos','swing','press_hombros','flexion_suelo','press_pecho_suelo','curl','plancha_suelo']));
   if(id==='C'){
     const L=pi===0?['burpee','swing','escaladores_suelo','sentadilla_goblet','boxeo']:['burpee','swing','escaladores_suelo','sentadilla_press','zancada_peso','boxeo'];
     return {id,n:'Cardio intenso · Circuito',type:'circuit',items:L.map(e=>({ex:e})),work:P.cw,rest:P.cr,rounds:P.rounds,roundRest:60};
