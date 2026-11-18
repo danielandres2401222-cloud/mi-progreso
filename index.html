@@ -304,6 +304,74 @@ const EX={
   f:[0,90,180,270,360].map(A=>ST({arms:[{a:A,b:A},{a:A-8,b:A-8}]}))},
 };
 
+
+/* ---------- Ejercicios del nivel EXIGENTE ---------- */
+(function(){
+  const PU0={hip:[105.1,169.2],torso:115.3}, PU1={hip:[110.9,187.5],torso:100};
+  const FH=[{t:[152,199],k:-1},{t:[147,199],k:-1}];
+  const FL=(a)=>[{a:a,b:a,f:150},{a:a-2,b:a-2,f:150}];
+  Object.assign(EX,{
+  flexion_suelo:{n:'Flexiones de brazos',u:'reps',props:['mat'],dur:1300,
+   c:['Manos en el suelo un poco más abiertas que los hombros.','Cuerpo recto: baja el pecho casi al suelo y empuja.','Si no te salen, apoya las rodillas o hazlas en el mesón.'],
+   f:[Object.assign({arms:FH,legs:FL(-64.7)},PU0), Object.assign({arms:FH,legs:FL(-80)},PU1)]},
+  plancha_suelo:{n:'Plancha en el suelo',u:'secs',props:['mat'],dur:1800,
+   c:['Antebrazos en el suelo, codos bajo los hombros.','Cuerpo recto, aprieta abdomen y glúteos.','Si se te hunde la cadera, apoya las rodillas.'],
+   f:[{hip:[109.9,182.8],torso:103.8,arms:[{a:0,b:90},{a:-2,b:88}],legs:FL(-76.2)},{hip:[109.9,181.8],torso:103.8,arms:[{a:0,b:90},{a:-2,b:88}],legs:FL(-76.2)}]},
+  escaladores_suelo:{n:'Escaladores',u:'secs',props:['mat'],dur:480,hold:.06,
+   c:['Posición de flexión con brazos estirados.','Lleva una rodilla al pecho y luego la otra.','Cadera abajo, ritmo rápido y constante.'],
+   f:[Object.assign({arms:FH,legs:[{t:[100,193],k:1,f:150},{t:[42,200],k:1,f:150}]},PU0), Object.assign({arms:FH,legs:[{t:[42,200],k:1,f:150},{t:[98,193],k:1,f:150}]},PU0)]},
+  bulgara:{n:'Sentadilla búlgara',u:'reps',side:1,w:true,props:['chairBack'],dur:1500,
+   c:['Pie de atrás sobre una silla firme, el de adelante lejos.','Baja recto hasta que el muslo de adelante quede casi horizontal.','Sube empujando con el talón de adelante.'],
+   f:[{hip:[122,130],torso:178,arms:[{a:2,b:2},{a:-2,b:-2}],legs:[{t:[142,200],k:1,f:90},{t:[90,164],k:1,f:-80}]},
+      {hip:[112,160],torso:172,arms:[{a:2,b:2},{a:-2,b:-2}],legs:[{t:[142,200],k:1,f:90},{t:[90,164],k:1,f:-80}]}]},
+  zancada_peso:{n:'Zancada con mancuernas',u:'reps',side:1,w:true,dur:1400,
+   c:['Una mancuerna en cada mano, brazos estirados.','Paso largo atrás y baja la rodilla cerca del suelo.','Vuelve empujando con el pie de adelante.'],
+   f:[ST({hip:[124,128],arms:[{a:2,b:2},{a:-2,b:-2}],legs:[{t:[130,200],k:1,f:90},{t:[122,200],k:1,f:90}]}),
+      ST({hip:[108,160],torso:178,arms:[{a:2,b:2},{a:-2,b:-2}],legs:[{t:[132,200],k:1,f:90},{t:[72,194],k:1,f:55}]})]},
+  remo_dos:{n:'Remo inclinado',u:'reps',w:true,dur:1300,
+   c:['Inclínate con la espalda recta y rodillas suaves.','Tira las dos pesas hacia la cadera, codos atrás.','Aprieta la espalda arriba y baja lento.'],
+   f:[{hip:[100,134],torso:112,arms:[{a:0,b:0},{a:-3,b:-3}],legs:[{t:[122,200],k:1},{t:[116,200],k:1}]},
+      {hip:[100,134],torso:112,arms:[{a:-118,b:-6},{a:-121,b:-9}],legs:[{t:[122,200],k:1},{t:[116,200],k:1}]}]},
+  swing:{n:'Swing con mancuerna',u:'secs',w:'goblet',dur:700,hold:.04,
+   c:['Una mancuerna con las dos manos.','Lleva la cadera atrás y luego empújala fuerte adelante.','La fuerza sale de la cadera, no de los brazos.'],
+   f:[{hip:[100,136],torso:118,arms:[{a:-18,b:-18},{a:-20,b:-20}],legs:[{t:[124,200],k:1},{t:[118,200],k:1}]},
+      {hip:[118,128],torso:182,arms:[{a:88,b:88},{a:86,b:86}],legs:[{t:[124,200],k:1},{t:[118,200],k:1}]}]},
+  burpee:{n:'Burpee sin salto',u:'secs',props:['mat'],dur:650,hold:.1,seq:[0,1,2,1],
+   c:['Agáchate y apoya las manos en el suelo.','Lleva los pies atrás a posición de flexión (de a uno si quieres).','Vuelve los pies y ponte de pie. Sin saltar.'],
+   f:[{hip:[118,128],torso:180,arms:[{t:[126,172],k:1},{t:[120,172],k:1}],legs:[{t:[126,200],k:1,f:90},{t:[120,200],k:1,f:90}]},
+      {hip:[104,168],torso:125,arms:[{t:[152,199],k:-1},{t:[147,199],k:-1}],legs:[{t:[128,200],k:1,f:90},{t:[122,200],k:1,f:90}]},
+      {hip:[105.1,169.2],torso:115.3,arms:[{t:[152,199],k:-1},{t:[147,199],k:-1}],legs:[{t:[40,200],k:1,f:150},{t:[44,200],k:1,f:150}]}]},
+  });
+})();
+const PHX=[
+ {sets:4,reps:12,rest:45,plank:30,cw:40,cr:20,rounds:4},
+ {sets:4,reps:15,rest:40,plank:40,cw:45,cr:15,rounds:5},
+ {sets:5,reps:12,rest:35,plank:50,cw:45,cr:15,rounds:6},
+ {sets:5,reps:15,rest:30,plank:60,cw:50,cr:10,rounds:6},
+ {sets:5,reps:15,rest:30,plank:60,cw:50,cr:10,rounds:6},
+];
+const level=()=>S.settings.level||'exigente';
+function workoutX(id,pi){
+  const P=PHX[pi];
+  const str=(list)=>({type:'sets',items:list.map(e=>{const x=EX[e]; return {ex:e,sets:P.sets,reps:x.u==='secs'?0:P.reps,secs:x.u==='secs'?P.plank:0,rest:P.rest};})});
+  if(id==='A') return Object.assign({id,n:'Fuerza A · Piernas y empuje'},str([pi<2?'sentadilla_goblet':'sentadilla_press','bulgara','flexion_suelo','zancada_peso','puente_gluteo','plancha_suelo']));
+  if(id==='B') return Object.assign({id,n:'Fuerza B · Espalda, hombros y core'},str(['peso_muerto','remo_dos','press_hombros','press_pecho_suelo','curl','bicho_muerto']));
+  if(id==='C'){
+    const L=pi===0?['burpee','swing','escaladores_suelo','sentadilla_goblet','boxeo']:['burpee','swing','escaladores_suelo','sentadilla_press','zancada_peso','boxeo'];
+    return {id,n:'Cardio intenso · Circuito',type:'circuit',items:L.map(e=>({ex:e})),work:P.cw,rest:P.cr,rounds:P.rounds,roundRest:60};
+  }
+  if(id==='W'||id==='L'){
+    let seg;
+    if(pi===0) seg=[['caminar',1800,'Caminata rápida']];
+    else { const [tr,ca,n]=[[60,120,8],[120,60,8],[240,60,5],[480,60,3]][pi-1];
+      seg=[['caminar',300,'Caminata de calentamiento']];
+      for(let i=0;i<n;i++){ seg.push(['trotar',tr,`Trote ${i+1} de ${n}`]); if(i<n-1) seg.push(['caminar',ca,'Camina y recupera']); }
+      seg.push(['caminar',300,'Caminata para enfriar']); }
+    return {id,n:pi===0?'Caminata rápida':'Caminata + trote',type:'intervals',items:seg.map(s=>({ex:s[0],secs:s[1],label:s[2]}))};
+  }
+  return null;
+}
+
 /* =========================================================
    PLAN DE 1 AÑO (52 semanas, 5 fases)
    ========================================================= */
@@ -320,6 +388,7 @@ function phaseIdx(week){ const o=S.settings.phaseOverride; if(o!=null&&o!=='') r
 function wk(){ const d=daysBetween(S.profile.start,todayStr()); return Math.min(52,Math.max(1,Math.floor(d/7)+1)); }
 
 function workout(id,pi,week){
+  if(level()==='exigente') return workoutX(id,pi);
   const P=PHASES[pi];
   const str=(list)=>({type:'sets',items:list.map(e=>{const x=EX[e[0]];return {ex:e[0],sets:e[2]||P.sets,reps:x.u==='secs'?0:(e[1]||P.reps),secs:x.u==='secs'?(e[1]||P.plank):0,rest:P.rest};})});
   if(id==='A'){
@@ -363,7 +432,7 @@ function workout(id,pi,week){
 }
 function scheduleFor(pi,week){ // índice 0=lunes
   const fri= week%2 ? 'A':'B';
-  return ['A','C','B','W',fri, pi===0?'L':'C', null];
+  return ['A','C','B','W',fri, (pi===0&&level()!=='exigente')?'L':'C', null];
 }
 function steps(w){
   const out=[]; const push=(o)=>out.push(o);
@@ -510,8 +579,8 @@ function entrenar(){
   <div class="card"><h2>Semana ${w} · Fase ${pi+1}: ${PHASES[pi].n}</h2><p class="small mut" style="margin:0">${PHASES[pi].desc}</p></div>
   <div class="card list" id="wkList">${list}</div>
   <div class="card"><h2>El plan de 1 año</h2>
-   ${PHASES.map((p,i)=>`<div class="it" style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)"><span class="chip ${i===pi?'on':''}">Sem ${p.from}–${p.to}</span><div class="small"><b>${p.n}</b><br><span class="mut">${p.sets} series · ${p.reps} reps · descanso ${p.rest}s · cardio ${p.cw}/${p.cr}s × ${p.rounds}</span></div></div>`).join('')}
-   <p class="small mut">Intensidad objetivo: exigente pero controlada. En fuerza, termina cada serie con 2–3 repeticiones "en reserva". En cardio, debes poder hablar entrecortado, pero no cantar.</p>
+   ${PHASES.map((p0,i)=>{const p=level()==='exigente'?Object.assign({},p0,PHX[i]):p0; return `<div class="it" style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)"><span class="chip ${i===pi?'on':''}">Sem ${p.from}–${p.to}</span><div class="small"><b>${p.n}</b><br><span class="mut">${p.sets} series · ${p.reps} reps · descanso ${p.rest}s · cardio ${p.cw}/${p.cr}s × ${p.rounds}</span></div></div>`;}).join('')}
+   <p class="small mut"><b>Nivel: ${level()==='exigente'?'Exigente':'Normal'}</b> (se cambia en Ajustes). Intensidad objetivo: exigente pero controlada. En fuerza, termina cada serie con 2–3 repeticiones "en reserva". En cardio, debes poder hablar entrecortado, pero no cantar.</p>
   </div>
   <div class="card"><h2>Ejercicios</h2><p class="small mut" style="margin-top:0">Toca uno para ver la técnica.</p><div class="exgrid" id="lib"></div></div>`;
   document.querySelectorAll('#wkList .it').forEach(el=>{const id=sch[+el.dataset.i]; if(id) el.onclick=()=>showWorkout(workout(id,pi,w));});
@@ -627,6 +696,8 @@ function ajustes(){
   view.innerHTML=`
   <div class="card"><h2>Apariencia</h2><div class="seg" id="thSeg"><button data-t="light" class="${isDark()?'':'on'}">☀ Claro</button><button data-t="dark" class="${isDark()?'on':''}">☾ Nocturno</button></div>
    <label>Fondo animado</label><div class="seg" id="fxSeg">${[['ondas','Ondas'],['constelacion','Constelación'],['pesas','Pesas'],['none','Ninguno']].map(o=>`<button data-f="${o[0]}" class="${(document.documentElement.dataset.fx||'ondas')===o[0]?'on':''}">${o[1]}</button>`).join('')}</div></div>
+  <div class="card"><h2>Nivel de entrenamiento</h2><div class="seg" id="lvSeg"><button data-l="normal" class="${level()==='normal'?'on':''}">Normal</button><button data-l="exigente" class="${level()==='exigente'?'on':''}">Exigente</button></div>
+   <p class="small mut">Exigente: flexiones en el suelo, sentadilla búlgara, burpees sin salto, swing, más series y menos descanso. Sin saltos, para cuidar rodillas y tobillos.</p></div>
   <div class="card"><h2>Perfil y meta</h2>
    <label>Nombre</label><input id="a_n" value="${esc(p.name)}">
    <div class="grid2"><div><label>Estatura (cm)</label><input id="a_h" type="text" inputmode="decimal" value="${numStr(p.height)}"></div><div><label>Edad</label><input id="a_a" type="text" inputmode="decimal" value="${p.age||''}"></div></div>
@@ -640,6 +711,7 @@ function ajustes(){
    <div class="grid2"><button class="btn" id="a_exp">Descargar respaldo</button><button class="btn w" id="a_imp">Restaurar</button></div><input type="file" id="a_file" accept=".json,application/json" class="hide"></div>
   <div class="card"><h2>Borrar todo</h2><button class="btn w" id="a_rst">Borrar mis datos</button></div>
   ${installHint()}`;
+  document.querySelectorAll('#lvSeg button').forEach(b=>b.onclick=()=>{S.settings.level=b.dataset.l; save(); render();});
   document.querySelectorAll('#thSeg button').forEach(b=>b.onclick=()=>setTheme(b.dataset.t));
   document.querySelectorAll('#fxSeg button').forEach(b=>b.onclick=()=>{ BG.set(b.dataset.f); document.querySelectorAll('#fxSeg button').forEach(x=>x.classList.toggle('on',x===b)); });
   $('#a_ok').onclick=()=>{ const g=num($('#a_g').value), w=num($('#a_w').value); if(!g||!w||g>=w){alert('La meta debe ser menor al peso inicial.');return;}
