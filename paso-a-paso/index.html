@@ -124,6 +124,42 @@ html[data-theme=dark]{--softA:rgba(24,24,24,.62)}
 #player .stage{animation:fadein .25s}
 .bar i{transition:width 1s cubic-bezier(.2,.8,.2,1)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ---------- diseño moderno ---------- */
+header{background:rgba(0,0,0,.78);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border-bottom:1px solid rgba(255,255,255,.08)}
+nav{background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border-top:1px solid var(--line)}
+html[data-theme=dark] nav{background:rgba(0,0,0,.72)}
+nav button{transition:color .2s,transform .15s}nav button:active{transform:scale(.92)}
+nav button.on svg{transform:translateY(-1px);filter:drop-shadow(0 2px 4px rgba(0,0,0,.18))}
+.card{border-radius:20px;border:1px solid var(--line);box-shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.05)}
+.card.dark{border-color:transparent;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+html[data-theme=dark] .card{box-shadow:none}
+.btn{border-radius:14px}
+.juntos{margin-top:10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.1);font-size:13px;line-height:1.35}
+/* ---------- alimentación ---------- */
+.hero .ringwrap{display:flex;justify-content:center;margin:6px 0 4px}
+.ring{width:190px;height:190px}.ring .rb{fill:none;stroke:rgba(255,255,255,.14);stroke-width:12}
+.ring .rf{fill:none;stroke:var(--bg);stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)}
+.ring .rt{fill:var(--bg);font-size:28px;font-weight:800}.ring .rs{fill:var(--mut2);font-size:11px}
+.grid3.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin-top:6px}
+.grid3.mini b{display:block;font-size:18px}.grid3.mini span{font-size:11px;color:var(--mut2)}
+.balance{display:flex;gap:12px;align-items:center}.balance .bi{font-size:30px}
+.vasos{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 8px}
+.vasos button{background:none;border:0;padding:0;width:30px;height:38px}
+.vaso{width:30px;height:38px}.vaso .vb{fill:none;stroke:var(--fg);stroke-width:1.6}.vaso .vf{fill:var(--fg);opacity:0;transform-origin:50% 100%;transform:scaleY(.2);transition:all .35s cubic-bezier(.2,.8,.2,1)}
+.vaso.on .vf{opacity:.85;transform:none}
+h2.sec{font-size:18px;margin:18px 4px 10px}
+.meal .emo{font-size:30px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:var(--bg);border-radius:14px;flex:none}
+.meal .kc{font-size:14px}.meal.done{opacity:.72}.meal.done .emo{outline:2px solid var(--fg)}
+.mbtn{gap:8px;margin-top:10px;flex-wrap:wrap}
+.fl{display:grid;gap:4px;font-size:13px;color:var(--mut);margin-top:8px}
+.fl input,.fl select{font:inherit;font-size:16px;color:var(--fg);background:var(--bg);border:1px solid var(--line2);border-radius:12px;padding:10px;-webkit-appearance:none;appearance:none}
+.opk{display:grid;gap:8px}.opk .btn{display:flex;justify-content:space-between;align-items:center}.opk .btn span{font-weight:400;opacity:.7;font-size:13px}
+.lista{display:grid;gap:6px}.li{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;color:var(--fg)}
+.li span:last-child{margin-left:auto}.li .ck{width:22px;height:22px;border:2px solid var(--fg);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+.li.on{opacity:.55;text-decoration:line-through}.li.on .ck{background:var(--fg);color:var(--bg)}
+.foodmini{display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer}
+.foodmini .fb{flex:1}.foodmini .bar{height:8px;border-radius:99px;background:var(--bar);overflow:hidden;margin-top:6px}.foodmini .bar i{display:block;height:100%;background:var(--fg);border-radius:99px}
 </style>
 </head>
 <body>
@@ -134,6 +170,7 @@ html[data-theme=dark]{--softA:rgba(24,24,24,.62)}
  <button data-t="inicio" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</button>
  <button data-t="entrenar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/></svg>Entrenar</button>
  <button data-t="progreso"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18M5 16l4-5 4 3 6-8"/></svg>Progreso</button>
+ <button data-t="comida"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 3v8M5 3v4a2 2 0 0 0 4 0V3M7 11v10"/><path d="M17 21V3c-2 1.5-3 4-3 7 0 1.6 1.3 3 3 3"/></svg>Comida</button>
  <button data-t="ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>Ajustes</button>
 </nav>
 <div id="player" class="hide"></div>
@@ -328,7 +365,10 @@ function workout(id,pi,week){
   if(id==='W') return {id,n:'Caminata',type:'intervals',items:[{ex:'caminar_rigido',secs:P.walk*60,label:'Caminata a paso firme'}]};
   return null;
 }
-function scheduleFor(pi,week){ const fri= week%2?'A':'B'; return ['A','W','B','C',fri,'W',null]; }
+function scheduleFor(pi,week){ // índice 0=lunes · igual en las dos apps para entrenar juntos
+  const fri= week%2 ? 'A':'B';
+  return ['A','C','B','W',fri,'W',null];
+}
 function steps(w){
   const out=[]; const push=(o)=>out.push(o);
   WARMUP.forEach(([e,s])=>push({k:'work',ex:e,secs:s,tag:'Calentamiento'}));
@@ -383,7 +423,7 @@ let tab='inicio';
 const isDark=()=>document.documentElement.dataset.theme==='dark';
 function setTheme(t){ document.documentElement.dataset.theme=t; try{localStorage.setItem('tema',t);}catch(e){} render(false); try{BG.redraw();}catch(e){} }
 function syncThemeBtn(){ const b=document.getElementById('thBtn'); if(b){ b.textContent=isDark()?'☀':'☾'; b.onclick=()=>setTheme(isDark()?'light':'dark'); } }
-const TABS=['inicio','entrenar','progreso','ajustes'];
+const TABS=['inicio','entrenar','progreso','comida','ajustes'];
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{ const d=TABS.indexOf(b.dataset.t)-TABS.indexOf(tab); if(!d) return; view.style.setProperty('--dx',(d>0?18:-18)+'px'); tab=b.dataset.t; render(true);});
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
@@ -400,6 +440,169 @@ function animateNumbers(){
   });
   requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('.bar i[data-w]').forEach(i=>i.style.width=i.dataset.w+'%')));
 }
+const CFG_APP={sexo:'h',deficit:400,compa:'Daniel',met:{A:3,B:3,C:3.5,W:3},nota:'Si toma medicamentos o tiene alguna condición, conviene revisar este plan con su médico.',
+ juntos:{A:'🤝 Hoy son ejercicios en casa: hazlos a la misma hora que {c}, cada uno con los suyos.',B:'🤝 Hoy son ejercicios en casa: hazlos a la misma hora que {c}, cada uno con los suyos.',C:'🤝 Hoy es cardio de pie en casa: hagan el circuito juntos con {c}, cada uno a su ritmo.',W:'🤝 Hoy salen juntos a la calle con {c}: tú caminas a tu ritmo y él trota ida y vuelta a tu lado.'}};
+/* =========================================================
+   ALIMENTACIÓN + ENTRENAR JUNTOS (módulo compartido)
+   ========================================================= */
+const FOOD={
+ des:[
+  {n:'Avena con plátano y leche',k:380,i:['Avena','Plátano','Leche'],e:'🥣'},
+  {n:'Pan integral con huevo revuelto y tomate',k:390,i:['Pan integral','Huevos','Tomate'],e:'🍳'},
+  {n:'Pan con palta y té',k:360,i:['Pan integral','Palta','Té'],e:'🥑'},
+  {n:'Yogur natural con avena y manzana',k:340,i:['Yogur natural','Avena','Manzana'],e:'🥛'},
+  {n:'Tortilla de 2 huevos con espinaca y pan',k:400,i:['Huevos','Espinaca','Pan integral'],e:'🥚'},
+  {n:'Avena cocida con canela y manzana',k:350,i:['Avena','Manzana','Leche','Canela'],e:'🍎'},
+  {n:'Pan pita con quesillo y tomate',k:370,i:['Pan pita','Quesillo','Tomate'],e:'🧀'},
+  {n:'2 huevos duros, pan integral y fruta',k:410,i:['Huevos','Pan integral','Naranja'],e:'🥚'},
+  {n:'Batido de leche, avena y plátano',k:390,i:['Leche','Avena','Plátano'],e:'🥤'},
+  {n:'Tostadas con mantequilla de maní y plátano',k:420,i:['Pan integral','Mantequilla de maní','Plátano'],e:'🍞'}],
+ alm:[
+  {n:'Lentejas con arroz y ensalada',k:620,i:['Lentejas','Arroz','Zanahoria','Lechuga'],e:'🍲'},
+  {n:'Porotos con riendas y zapallo',k:640,i:['Porotos','Fideos','Zapallo','Cebolla'],e:'🍲'},
+  {n:'Garbanzos guisados con verduras',k:600,i:['Garbanzos','Zanahoria','Cebolla','Pimentón'],e:'🥘'},
+  {n:'Pollo al horno con papas y ensalada',k:610,i:['Pollo (trutro)','Papas','Lechuga','Tomate'],e:'🍗'},
+  {n:'Charquicán con huevo',k:590,i:['Papas','Zapallo','Carne molida','Huevos','Choclo'],e:'🥔'},
+  {n:'Arroz con huevo a la plancha y ensalada chilena',k:560,i:['Arroz','Huevos','Tomate','Cebolla'],e:'🍚'},
+  {n:'Fideos con salsa de tomate y atún',k:600,i:['Fideos','Atún en lata','Salsa de tomate'],e:'🍝'},
+  {n:'Jurel con arroz y ensalada',k:580,i:['Jurel en lata','Arroz','Lechuga','Tomate'],e:'🐟'},
+  {n:'Cazuela de pollo con papa, zapallo y choclo',k:560,i:['Pollo (trutro)','Papas','Zapallo','Choclo'],e:'🍲'},
+  {n:'Tortilla de zapallo italiano con arroz',k:540,i:['Zapallo italiano','Huevos','Arroz','Cebolla'],e:'🥒'},
+  {n:'Pollo arvejado con arroz',k:600,i:['Pollo (trutro)','Arvejas','Zanahoria','Arroz'],e:'🍗'},
+  {n:'Carbonada de carne y verduras',k:570,i:['Carne molida','Papas','Zapallo','Zanahoria','Choclo'],e:'🍲'},
+  {n:'Ensalada de atún con papas y huevo',k:550,i:['Atún en lata','Papas','Huevos','Lechuga'],e:'🥗'},
+  {n:'Guiso de porotos verdes con arroz',k:530,i:['Porotos verdes','Papas','Cebolla','Arroz'],e:'🫛'}],
+ once:[
+  {n:'Pan integral con quesillo y tomate + té',k:330,i:['Pan integral','Quesillo','Tomate','Té'],e:'🧀'},
+  {n:'Pan con huevo + té',k:340,i:['Pan integral','Huevos','Té'],e:'🍳'},
+  {n:'Yogur con fruta picada',k:250,i:['Yogur natural','Manzana','Plátano'],e:'🍓'},
+  {n:'Pan con palta + té',k:330,i:['Pan integral','Palta','Té'],e:'🥑'},
+  {n:'Sándwich de pollo desmenuzado',k:360,i:['Pan integral','Pollo (trutro)','Lechuga'],e:'🥪'},
+  {n:'Leche con avena y canela',k:280,i:['Leche','Avena','Canela'],e:'🥛'},
+  {n:'Fruta y un puñado de maní',k:260,i:['Manzana','Maní'],e:'🥜'},
+  {n:'Pan con jamón de pavo y tomate',k:310,i:['Pan integral','Jamón de pavo','Tomate'],e:'🥪'}],
+ cena:[
+  {n:'Sopa de verduras con huevo',k:330,i:['Zapallo','Zanahoria','Papas','Huevos'],e:'🍜'},
+  {n:'Ensalada grande con atún',k:350,i:['Lechuga','Tomate','Atún en lata','Zanahoria'],e:'🥗'},
+  {n:'Tortilla de verduras',k:340,i:['Huevos','Zapallo italiano','Cebolla','Espinaca'],e:'🍳'},
+  {n:'Crema de zapallo con pan',k:360,i:['Zapallo','Cebolla','Leche','Pan integral'],e:'🎃'},
+  {n:'Omelette con tomate',k:320,i:['Huevos','Tomate','Quesillo'],e:'🍳'},
+  {n:'Pan pita con pollo y lechuga',k:380,i:['Pan pita','Pollo (trutro)','Lechuga','Tomate'],e:'🌯'},
+  {n:'Verduras salteadas con huevo',k:330,i:['Repollo','Zanahoria','Cebolla','Huevos'],e:'🥬'},
+  {n:'Ensalada de garbanzos',k:370,i:['Garbanzos','Tomate','Cebolla','Pepino'],e:'🥗'},
+  {n:'Sopa de lentejas liviana',k:340,i:['Lentejas','Zanahoria','Cebolla'],e:'🍲'}],
+ col:[
+  {n:'Manzana',k:80,i:['Manzana'],e:'🍎'},{n:'Plátano',k:100,i:['Plátano'],e:'🍌'},
+  {n:'Zanahoria en palitos',k:50,i:['Zanahoria'],e:'🥕'},{n:'Yogur natural',k:110,i:['Yogur natural'],e:'🥛'},
+  {n:'Puñado de maní (30 g)',k:170,i:['Maní'],e:'🥜'},{n:'Naranja',k:70,i:['Naranja'],e:'🍊'},
+  {n:'Huevo duro',k:80,i:['Huevos'],e:'🥚'},{n:'Pepino con limón',k:30,i:['Pepino','Limón'],e:'🥒'}]
+};
+const COMIDAS=[['des','Desayuno',.25],['col','Colación',.05],['alm','Almuerzo',.35],['once','Once',.2],['cena','Cena',.15]];
+const DIAS=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+/* lunes de la semana de una fecha (igual en las dos apps, así comen lo mismo) */
+function lunesDe(d){d=new Date(d);d.setHours(12,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return d}
+function semilla(str){let h=2166136261;for(const c of str){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return()=>{h=Math.imul(h^(h>>>15),2246822507);h=Math.imul(h^(h>>>13),3266489909);h^=h>>>16;return(h>>>0)/4294967296}}
+function planSemana(d){const L=lunesDe(d),key=ds(L);const rnd=semilla('menu-'+key);const plan=DIAS.map(()=>({}));
+  for(const[c]of COMIDAS){const idx=FOOD[c].map((_,i)=>i);for(let i=idx.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]]}
+    for(let d2=0;d2<7;d2++)plan[d2][c]=idx[d2%idx.length]}
+  return{key,plan}}
+function FS(){if(!S.food)S.food={log:{},sexo:CFG_APP.sexo};if(!S.food.log)S.food.log={};return S.food}
+const METX=id=>CFG_APP.met[id]||4;
+function gastoEjercicio(fecha){const w=curW();const ses=S.sessions.filter(s=>s.d===fecha);let k=0;
+  for(const s of ses)k+=METX(s.id)*w*(s.mins||30)/60;
+  if(!ses.length&&fecha===todayStr()){const wk0=wk(),pi=phaseIdx(wk0),id=scheduleFor(pi,wk0)[(new Date().getDay()+6)%7];if(id){const wo=workout(id,pi,wk0);return{k:Math.round(METX(id)*w*estMin(wo)/60),plan:true,id}}}
+  return{k:Math.round(k),plan:false,id:ses[0]&&ses[0].id}}
+function metas(fecha){const f=FS(),w=curW(),h=S.profile.height||170,a=num(f.edad)||S.profile.age||35,hom=(f.sexo||CFG_APP.sexo)!=='m';
+  const tmb=10*w+6.25*h-5*a+(hom?5:-161),base=tmb*1.3,ex=gastoEjercicio(fecha),gasto=Math.round(base+ex.k);
+  const piso=Math.max(Math.round(tmb),hom?1500:1200),meta=Math.max(piso,Math.round((gasto-CFG_APP.deficit)/10)*10);
+  const entreno=!!ex.id,agua=Math.min(4,Math.max(1.5,Math.round(w*0.035*10)/10)+(entreno?0.5:0));
+  return{tmb:Math.round(tmb),base:Math.round(base),ex,gasto,meta,agua,vasos:Math.round(agua/0.25)}}
+function porcion(c,share,meta){const r=FOOD[c];return f=>{let x=share*meta/f.k;x=Math.round(x*4)/4;return Math.min(2,Math.max(0.75,x))}}
+const fmtP=x=>x===1?'porción normal':x<1?'porción chica (×'+String(x).replace('.',',')+')':'porción ×'+String(x).replace('.',',');
+function diaPlan(fecha){const d=parse(fecha),{plan}=planSemana(d),dia=plan[(d.getDay()+6)%7],M=metas(fecha);
+  return COMIDAS.map(([c,n,sh])=>{const r=FOOD[c][dia[c]];const p=porcion(c,sh,M.meta)(r);return{c,n,r,p,k:Math.round(r.k*p)}})}
+function consumoDia(fecha){const L=FS().log[fecha]||{},items=diaPlan(fecha);let k=0;
+  for(const it of items){const v=(L.m||{})[it.c];if(v==='ok')k+=it.k;else if(v&&v.otro)k+=v.otro}
+  return k+(L.extra||0)}
+function anillo(v,max,txt,sub){const r=52,C=2*Math.PI*r,p=Math.min(1,max?v/max:0);return`<svg viewBox="0 0 130 130" class="ring"><circle cx="65" cy="65" r="${r}" class="rb"/><circle cx="65" cy="65" r="${r}" class="rf" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-p)}" transform="rotate(-90 65 65)"/><text x="65" y="62" text-anchor="middle" class="rt">${txt}</text><text x="65" y="82" text-anchor="middle" class="rs">${sub}</text></svg>`}
+const VASO=(on)=>`<svg viewBox="0 0 24 30" class="vaso ${on?'on':''}"><path d="M3 3h18l-2.2 23.2A2 2 0 0 1 16.8 28H7.2a2 2 0 0 1-2-1.8z" class="vb"/><path d="M5.3 11h13.4l-1.6 15H6.9z" class="vf"/></svg>`;
+let comidaFecha=null;
+function comida(){
+  const f=FS();const fecha=comidaFecha||todayStr();const esHoy=fecha===todayStr();
+  const M=metas(fecha),items=diaPlan(fecha),L=f.log[fecha]||{m:{}},cons=consumoDia(fecha);
+  const comio=items.some(it=>(L.m||{})[it.c])||L.extra;
+  const bal=M.gasto-cons,gr=Math.round(Math.abs(bal)/7.7);
+  const dow=(parse(fecha).getDay()+6)%7;
+  view.innerHTML=`
+  <div class="card dark hero">
+    <div class="row between"><button class="btn sm w" id="cPrev" aria-label="Día anterior">‹</button><div style="text-align:center"><div class="mut small">${esHoy?'Hoy':DIAS[dow]}</div><b>${fmtD(fecha)}</b></div><button class="btn sm w" id="cNext" ${esHoy?'disabled':''} aria-label="Día siguiente">›</button></div>
+    <div class="ringwrap">${anillo(cons,M.meta,cons.toLocaleString('es-CL'),'de '+M.meta.toLocaleString('es-CL')+' kcal')}</div>
+    <div class="grid3 mini">
+      <div><b>${M.gasto.toLocaleString('es-CL')}</b><span>gastas hoy</span></div>
+      <div><b>${M.ex.k.toLocaleString('es-CL')}</b><span>${M.ex.plan?'ejercicio (plan)':'ejercicio'}</span></div>
+      <div><b>${Math.max(0,M.meta-cons).toLocaleString('es-CL')}</b><span>te quedan</span></div>
+    </div>
+  </div>
+  ${(()=>{const nReg=items.filter(it=>(L.m||{})[it.c]).length,completo=nReg>=items.length||!esHoy;
+    if(!comio)return`<div class="card balance ok"><div class="bi">🎯</div><div><b>Si sigues el menú de ${esHoy?'hoy':'ese día'}</b><div class="small mut">deberías bajar unos <b>${Math.round((M.gasto-M.meta)/7.7)} g</b> de grasa. Marca lo que vayas comiendo.</div></div></div>`;
+    if(!completo){const proy=M.gasto-Math.max(cons,M.meta);return`<div class="card balance ok"><div class="bi">⏳</div><div><b>Vas bien: llevas ${cons.toLocaleString('es-CL')} kcal</b><div class="small mut">Te faltan ${items.length-nReg} comidas. Si completas el menú, hoy bajarías unos <b>${Math.max(0,Math.round(proy/7.7))} g</b>.</div></div></div>`}
+    return`<div class="card balance ${bal>=0?'ok':'mal'}"><div class="bi">${bal>=0?'🔥':'⚠️'}</div><div>${bal>=0?`<b>Déficit de ${bal.toLocaleString('es-CL')} kcal</b><div class="small mut">Con lo que comiste ${esHoy?'hoy':'ese día'} deberías haber bajado unos <b>${gr} g</b> de grasa.</div>`:`<b>Comiste ${Math.abs(bal).toLocaleString('es-CL')} kcal de más</b><div class="small mut">Equivale a unos ${gr} g. Mañana lo compensas, tranqui.</div>`}</div></div>`})()}
+  <div class="card">
+    <div class="row between"><h2>💧 Agua</h2><span class="small mut">${((L.agua||0)*0.25).toLocaleString('es-CL')} de ${M.agua.toLocaleString('es-CL')} L</span></div>
+    <div class="vasos">${Array.from({length:M.vasos},(_,i)=>`<button data-v="${i+1}" aria-label="Vaso ${i+1}">${VASO(i<(L.agua||0))}</button>`).join('')}</div>
+    <div class="small mut">${M.vasos} vasos de 250 ml${M.ex.id?' · +½ L porque hoy entrenas':''}. Toca un vaso para marcarlo.</div>
+  </div>
+  <h2 class="sec">🍽️ Menú de ${esHoy?'hoy':DIAS[dow].toLowerCase()}</h2>
+  ${items.map(it=>{const v=(L.m||{})[it.c];return`<div class="card meal ${v==='ok'?'done':''}">
+    <div class="row between"><div class="small mut">${it.n} · ${fmtP(it.p)}</div><b class="kc">${(v&&v.otro?v.otro:it.k)} kcal</b></div>
+    <div class="row" style="gap:10px;margin:6px 0 4px"><span class="emo">${it.r.e}</span><div><b>${esc(it.r.n)}</b><div class="small mut">${it.r.i.join(' · ')}</div></div></div>
+    ${v&&v.otro?`<div class="small mut">Comiste otra cosa (${v.otro} kcal)</div>`:''}
+    <div class="row mbtn"><button class="btn sm ${v==='ok'?'':'w'}" data-ok="${it.c}">${v==='ok'?'✓ Lo comí':'Lo comí'}</button><button class="btn sm w" data-otro="${it.c}">Otra cosa</button>${v?`<button class="btn sm w" data-no="${it.c}">Borrar</button>`:''}</div>
+  </div>`}).join('')}
+  <div class="card"><div class="row between"><div><b>¿Algo extra?</b><div class="small mut">Un pancito, una bebida, un dulce…</div></div><button class="btn sm" id="cExtra">+ Agregar</button></div>${L.extra?`<div class="small mut" style="margin-top:6px">Extras: ${L.extra} kcal · <a href="#" id="cExtraX">borrar</a></div>`:''}</div>
+  <div class="row" style="gap:10px;margin-bottom:14px"><button class="btn w" id="cSem" style="flex:1">📅 Menú de la semana</button><button class="btn w" id="cLista" style="flex:1">🛒 Lista de compras</button></div>
+  <div class="card"><h2>⚙️ Tus datos</h2>
+    <div class="grid2"><label class="fl">Sexo<select id="cSexo"><option value="h" ${(f.sexo||CFG_APP.sexo)!=='m'?'selected':''}>Hombre</option><option value="m" ${(f.sexo||CFG_APP.sexo)==='m'?'selected':''}>Mujer</option></select></label>
+    <label class="fl">Edad<input id="cEdad" inputmode="numeric" value="${esc(f.edad||S.profile.age||'')}"></label></div>
+    <label class="fl">Entrenas junto a<input id="cCompa" value="${esc(S.settings.compa||CFG_APP.compa)}"></label>
+    <p class="small mut" style="margin:8px 0 0">Calculado con tu peso actual (${kg(curW())}) y ${S.profile.height} cm. Meta: comer unas ${CFG_APP.deficit} kcal menos de lo que gastas, para bajar de forma sana. Son estimaciones: el peso de cada día sube y baja por el agua.${CFG_APP.nota?' '+CFG_APP.nota:''}</p>
+  </div>`;
+  const lg=()=>{const f2=FS();if(!f2.log[fecha])f2.log[fecha]={m:{}};if(!f2.log[fecha].m)f2.log[fecha].m={};return f2.log[fecha]};
+  const re=()=>{save();comida();animateNumbers()};
+  $('#cPrev').onclick=()=>{const d=parse(fecha);d.setDate(d.getDate()-1);comidaFecha=ds(d);comida()};
+  $('#cNext').onclick=()=>{const d=parse(fecha);d.setDate(d.getDate()+1);comidaFecha=ds(d)>=todayStr()?null:ds(d);comida()};
+  document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{const l=lg(),n=+b.dataset.v;l.agua=(l.agua===n?n-1:n);re()});
+  document.querySelectorAll('[data-ok]').forEach(b=>b.onclick=()=>{const l=lg();l.m[b.dataset.ok]=l.m[b.dataset.ok]==='ok'?undefined:'ok';re()});
+  document.querySelectorAll('[data-no]').forEach(b=>b.onclick=()=>{const l=lg();delete l.m[b.dataset.no];re()});
+  document.querySelectorAll('[data-otro]').forEach(b=>b.onclick=()=>pedirKcal('¿Qué tan grande fue?',k=>{const l=lg();l.m[b.dataset.otro]={otro:k};re()}));
+  $('#cExtra').onclick=()=>pedirKcal('¿Qué comiste extra?',k=>{const l=lg();l.extra=(l.extra||0)+k;re()},[['Fruta',80],['Pan',140],['Bebida (lata)',140],['Dulce / galletas',220],['Completo',450]]);
+  const ex=$('#cExtraX');if(ex)ex.onclick=e=>{e.preventDefault();const l=lg();l.extra=0;re()};
+  $('#cSem').onclick=verSemana;$('#cLista').onclick=verLista;
+  $('#cSexo').onchange=e=>{FS().sexo=e.target.value;re()};
+  $('#cEdad').onchange=e=>{FS().edad=num(e.target.value)||'';re()};
+  $('#cCompa').onchange=e=>{S.settings.compa=e.target.value.trim();save()};
+}
+function pedirKcal(tit,cb,ops){ops=ops||[['Liviano',300],['Normal',500],['Abundante',800]];
+  openModal(`<h2 style="margin-top:0">${tit}</h2><div class="opk">${ops.map(([n,k])=>`<button class="btn w" data-k="${k}">${n}<span>${k} kcal</span></button>`).join('')}</div>
+  <label class="fl" style="margin-top:12px">O escribe las calorías<input id="kIn" inputmode="numeric" placeholder="Ej: 350"></label>
+  <div class="row" style="gap:10px;margin-top:12px"><button class="btn w" id="kNo" style="flex:1">Cancelar</button><button class="btn" id="kOk" style="flex:1">Guardar</button></div>`);
+  document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{closeModal();cb(+b.dataset.k)});
+  $('#kNo').onclick=closeModal;$('#kOk').onclick=()=>{const k=Math.round(num($('#kIn').value));if(k>0){closeModal();cb(k)}}}
+function verSemana(){const{plan}=planSemana(new Date()),hoyI=(new Date().getDay()+6)%7,M=metas(todayStr());
+  openModal(`<h2 style="margin-top:0">📅 Menú de la semana</h2><p class="small mut" style="margin-top:-4px">Es el mismo menú en la app de ${esc(S.settings.compa||CFG_APP.compa)}: cocinan una vez y cada uno come su porción. Cambia cada semana.</p>
+  ${plan.map((d,i)=>`<div class="card ${i===hoyI?'dark':''}" style="margin-bottom:10px"><b>${DIAS[i]}${i===hoyI?' · hoy':''}</b>${COMIDAS.map(([c,n])=>`<div class="small" style="margin-top:4px"><span class="mut">${n}:</span> ${FOOD[c][d[c]].e} ${esc(FOOD[c][d[c]].n)}</div>`).join('')}</div>`).join('')}
+  <button class="btn" id="sOk" style="width:100%">Listo</button>`);$('#sOk').onclick=closeModal}
+function verLista(){const{plan}=planSemana(new Date());const cnt={};
+  plan.forEach(d=>COMIDAS.forEach(([c])=>FOOD[c][d[c]].i.forEach(x=>cnt[x]=(cnt[x]||0)+1)));
+  const L=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);const key='lc_'+planSemana(new Date()).key;const chk=new Set((FS()[key])||[]);
+  openModal(`<h2 style="margin-top:0">🛒 Lista de compras</h2><p class="small mut" style="margin-top:-4px">Todo lo de esta semana, con ingredientes baratos de feria y supermercado. Toca para marcar lo que ya tienes.</p>
+  <div class="lista">${L.map(([x,n])=>`<button class="li ${chk.has(x)?'on':''}" data-li="${esc(x)}"><span class="ck">${chk.has(x)?'✓':''}</span>${esc(x)}<span class="mut small">${n}×</span></button>`).join('')}</div>
+  <button class="btn" id="lOk" style="width:100%;margin-top:12px">Listo</button>`);
+  document.querySelectorAll('[data-li]').forEach(b=>b.onclick=()=>{const s2=new Set(FS()[key]||[]);const x=b.dataset.li;s2.has(x)?s2.delete(x):s2.add(x);FS()[key]=[...s2];save();b.classList.toggle('on');b.querySelector('.ck').textContent=s2.has(x)?'✓':''});
+  $('#lOk').onclick=closeModal}
+/* Entrenar juntos: mismo tipo de sesión el mismo día */
+function juntosTxt(id){const c=esc(S.settings.compa||CFG_APP.compa);return id?(CFG_APP.juntos[id]||'').replace(/\{c\}/g,c):''}
+
 function render(anim){
   syncThemeBtn();
   if(!S){ $('#nav').classList.add('hide'); $('#wkBadge').textContent=''; return onboarding(); }
@@ -407,7 +610,7 @@ function render(anim){
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
   const w=wk(), pi=phaseIdx(w);
   $('#wkBadge').textContent='Semana '+w+' de 52 · '+PHASES[pi].n;
-  ({inicio,entrenar,progreso,ajustes})[tab]();
+  ({inicio,entrenar,progreso,comida,ajustes})[tab]();
   window.scrollTo(0,0);
   if(anim!==false){ view.classList.remove('enter'); void view.offsetWidth; view.classList.add('enter'); setTimeout(()=>view.style.setProperty('--dx','0px'),400); }
   animateNumbers();
@@ -450,10 +653,11 @@ function inicio(){
   view.innerHTML=`
   <div class="card dark">
     <div class="mut small">${['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'][dow]} · Hola ${esc(S.profile.name)}</div>
-    ${wo?`<h2 style="font-size:22px;margin:6px 0 2px">${wo.n}</h2><div class="mut small">~${estMin(wo)} min · Fase ${pi+1}: ${PHASES[pi].n}${doneToday?' · ✓ hecho hoy':''}</div>
+    ${wo?`<h2 style="font-size:22px;margin:6px 0 2px">${wo.n}</h2><div class="mut small">~${estMin(wo)} min · Fase ${pi+1}: ${PHASES[pi].n}${doneToday?' · ✓ hecho hoy':''}</div>${juntosTxt(id)?`<div class="juntos">${juntosTxt(id)}</div>`:''}
     <div class="row" style="margin-top:12px"><button class="btn" id="goW">${doneToday?'Repetir':'Empezar'}</button><button class="btn w sm" id="seeW">Ver</button></div>`
     :`<h2 style="font-size:22px;margin:6px 0 2px">Día de descanso</h2><div class="mut small">El descanso también es parte del plan: ahí el cuerpo se recupera. Si quieres, sal a caminar suave.</div>`}
   </div>
+  ${(()=>{const M=metas(todayStr()),c=consumoDia(todayStr()),a=((FS().log[todayStr()]||{}).agua)||0;return`<div class="card foodmini" onclick="tab='comida';render()"><div class="fb"><div class="row between"><b>🍽️ Comida de hoy</b><span class="small mut">${c.toLocaleString('es-CL')} / ${M.meta.toLocaleString('es-CL')} kcal</span></div><div class="bar"><i style="width:${Math.min(100,c/M.meta*100)}%"></i></div><div class="small mut" style="margin-top:6px">💧 ${a} de ${M.vasos} vasos de agua</div></div><span>›</span></div>`})()}
   <div class="card">
     <div class="row between"><h2>Peso</h2><button class="btn sm" id="addW">+ Registrar</button></div>
     <div class="row between" style="align-items:flex-end;margin:6px 0 12px">
@@ -491,6 +695,7 @@ function entrenar(){
   view.innerHTML=`
   <div class="card"><h2>Semana ${w} · Fase ${pi+1}: ${PHASES[pi].n}</h2><p class="small mut" style="margin:0">${PHASES[pi].desc}</p></div>
   <div class="card list" id="wkList">${list}</div>
+  <div class="card"><h2>🤝 Entrenan juntos</h2><p class="small mut" style="margin:0">Los mismos días les toca lo mismo a ti y a ${esc(S.settings.compa||CFG_APP.compa)}: <b>lunes, miércoles y viernes</b> fuerza en casa, <b>martes</b> cardio en casa, <b>jueves y sábado</b> calle, y <b>domingo</b> descanso. Cada uno con su intensidad.</p></div>
   <div class="card"><h2>El plan de 1 año</h2>
    ${PHASES.map((p,i)=>`<div class="it" style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)"><span class="chip ${i===pi?'on':''}">Sem ${p.from}–${p.to}</span><div class="small"><b>${p.n}</b><br><span class="mut">${p.sets} series · ${p.reps} reps · descanso ${p.rest}s · cardio ${p.cw}/${p.cr}s × ${p.rounds}</span></div></div>`).join('')}
    <p class="small mut">Intensidad objetivo: moderada. Al terminar cada serie deberías poder hacer 3 o 4 repeticiones más. En cardio, debes poder hablar con algo de esfuerzo. Nunca debe doler: cansarse sí, doler no.</p>
