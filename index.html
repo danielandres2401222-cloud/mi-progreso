@@ -545,7 +545,7 @@ const fmtD=s=>{const d=parse(s);return d.getDate()+' '+['ene','feb','mar','abr',
 const kg=n=>(Math.round(n*10)/10).toLocaleString('es-CL')+' kg';
 let S=load();
 function load(){ try{const s=JSON.parse(localStorage.getItem(KEY)); if(s&&s.profile) return s;}catch(e){} return null; }
-function save(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){alert('No se pudo guardar en este teléfono.');} }
+function save(){ if(S)idbSetR(S); try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){alert('No se pudo guardar en este teléfono.');} }
 function curW(){ const w=[...S.weights].sort((a,b)=>a.d<b.d?-1:1); return w.length?w[w.length-1].w:S.profile.startWeight; }
 function sortedW(){ return [...S.weights].sort((a,b)=>a.d<b.d?-1:1); }
 function bmi(w){ const h=S.profile.height/100; return w/(h*h); }
@@ -577,7 +577,7 @@ function animateNumbers(){
   });
   requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('.bar i[data-w]').forEach(i=>i.style.width=i.dataset.w+'%')));
 }
-const CFG_APP={sexo:'h',deficit:500,compa:'tu compañero',met:{A:5,B:5,C:7.5,W:5.5,L:3},nota:'',
+const CFG_APP={archivo:'mi-progreso-respaldo',sexo:'h',deficit:500,compa:'tu compañero',met:{A:5,B:5,C:7.5,W:5.5,L:3},nota:'',
  juntos:{A:'🤝 Hoy es fuerza en casa: entrena a la misma hora que {c}, cada uno con su rutina.',B:'🤝 Hoy es fuerza en casa: entrena a la misma hora que {c}, cada uno con su rutina.',C:'🤝 Hoy es cardio en casa: hagan el circuito juntos con {c}, cada uno a su intensidad.',W:'🤝 Hoy salen juntos a la calle con {c}: tú caminas y trotas, y en cada trote vuelves a buscarlo.',L:'🤝 Hoy salen a caminar con {c}.'}};
 /* =========================================================
    ALIMENTACIÓN + ENTRENAR JUNTOS (módulo compartido)
@@ -740,6 +740,19 @@ function verLista(){const{plan}=planSemana(new Date());const cnt={};
 /* Entrenar juntos: mismo tipo de sesión el mismo día */
 function juntosTxt(id){const c=esc(S.settings.compa||CFG_APP.compa);return id?(CFG_APP.juntos[id]||'').replace(/\{c\}/g,c):''}
 
+
+/* ===== Protección de datos: copia interna + almacenamiento persistente + respaldo ===== */
+function idbR(){return new Promise((res,rej)=>{const r=indexedDB.open('respaldo_'+KEY,1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function idbSetR(v){try{const db=await idbR();db.transaction('kv','readwrite').objectStore('kv').put(v,'S')}catch(e){}}
+async function idbGetR(){try{const db=await idbR();return await new Promise(res=>{const q=db.transaction('kv').objectStore('kv').get('S');q.onsuccess=()=>res(q.result);q.onerror=()=>res(null)})}catch(e){return null}}
+async function compartirRespaldo(){const txt=JSON.stringify(S,null,1),nom=(CFG_APP.archivo||'respaldo')+'-'+todayStr()+'.json';
+  S.lastBackup=todayStr();save();
+  try{const f=new File([txt],nom,{type:'application/json'});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'Respaldo',text:'Respaldo de mi progreso ('+fmtD(todayStr())+'). Guárdalo: sirve para recuperar todo en Ajustes → Respaldo → Restaurar.'});render(false);return}}catch(e){if(e&&e.name==='AbortError'){render(false);return}}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'application/json'}));a.download=nom;document.body.appendChild(a);a.click();a.remove();render(false)}
+setTimeout(async()=>{try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+  if(!S){const d=await idbGetR();if(d&&d.profile){S=d;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}tab='inicio';render();setTimeout(()=>alert('✅ Recuperamos tu progreso guardado.'),300)}}
+  else idbSetR(S)},250);
+
 function render(anim){
   syncThemeBtn();
   if(!S){ $('#nav').classList.add('hide'); $('#wkBadge').textContent=''; return onboarding(); }
@@ -794,6 +807,7 @@ function inicio(){
     <div class="row" style="margin-top:12px"><button class="btn" id="goW">${doneToday?'Repetir':'Empezar'}</button><button class="btn w sm" id="seeW">Ver</button></div>`
     :`<h2 style="font-size:22px;margin:6px 0 2px">Día de descanso</h2><div class="mut small">El descanso también es parte del plan: ahí el cuerpo se recupera. Si quieres, sal a caminar suave.</div>`}
   </div>
+  ${(()=>{const lb=S.lastBackup,dd=lb?daysBetween(lb,todayStr()):daysBetween(S.profile.start,todayStr());return (lb?dd>=30:dd>=7)?`<div class="card backup"><b>🛟 Guarda un respaldo de tu progreso</b><div class="small mut" style="margin-top:4px">Si el celular llega a borrar los datos, con este archivo recuperas todo. Envíatelo por WhatsApp o guárdalo en Drive.</div><button class="btn sm" style="margin-top:10px" onclick="compartirRespaldo()">Enviar respaldo</button></div>`:''})()}
   ${(()=>{const M=metas(todayStr()),c=consumoDia(todayStr()),a=((FS().log[todayStr()]||{}).agua)||0;return`<div class="card foodmini" onclick="tab='comida';render()"><div class="fb"><div class="row between"><b>🍽️ Comida de hoy</b><span class="small mut">${c.toLocaleString('es-CL')} / ${M.meta.toLocaleString('es-CL')} kcal</span></div><div class="bar"><i style="width:${Math.min(100,c/M.meta*100)}%"></i></div><div class="small mut" style="margin-top:6px">💧 ${a} de ${M.vasos} vasos de agua</div></div><span>›</span></div>`})()}
   <div class="card">
     <div class="row between"><h2>Peso</h2><button class="btn sm" id="addW">+ Registrar</button></div>
@@ -973,10 +987,10 @@ function ajustes(){
     Object.assign(p,{name:$('#a_n').value.trim(),height:num($('#a_h').value)||p.height,age:num($('#a_a').value),startWeight:w,goal:g,start:$('#a_s').value||p.start}); save(); alert('Guardado'); render(); };
   $('#a_p').onchange=e=>{S.settings.phaseOverride=e.target.value===''?null:+e.target.value; save(); render();};
   $('#a_snd').onchange=e=>{S.settings.sound=e.target.checked; save();};
-  $('#a_exp').onclick=()=>{ const b=new Blob([JSON.stringify(S,null,1)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='mi-progreso-respaldo-'+todayStr()+'.json'; document.body.appendChild(a); a.click(); a.remove(); };
+  $('#a_exp').onclick=()=>{ const b=new Blob([JSON.stringify(S,null,1)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='mi-progreso-respaldo-'+todayStr()+'.json'; S.lastBackup=todayStr(); save(); document.body.appendChild(a); a.click(); a.remove(); };
   $('#a_imp').onclick=()=>$('#a_file').click();
   $('#a_file').onchange=e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ try{const d=JSON.parse(r.result); if(!d.profile) throw 0; if(confirm('Esto reemplaza tus datos actuales. ¿Continuar?')){S=d; save(); render();}}catch(x){alert('Archivo no válido.');} }; r.readAsText(f); };
-  $('#a_rst').onclick=()=>{ if(confirm('¿Seguro? Se borrará todo tu historial.') && confirm('Última confirmación: ¿borrar todo?')){ localStorage.removeItem(KEY); S=null; render(); } };
+  $('#a_rst').onclick=()=>{ if(confirm('¿Seguro? Se borrará todo tu historial.') && confirm('Última confirmación: ¿borrar todo?')){ localStorage.removeItem(KEY); idbSetR(null); S=null; render(); } };
 }
 
 /* =========================================================
