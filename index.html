@@ -8,8 +8,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Mi Progreso">
-<script>try{if(localStorage.getItem("tema")==="dark")document.documentElement.dataset.theme="dark";document.documentElement.dataset.fx=localStorage.getItem("fondo")||"ondas";}catch(e){}</script>
+<script>try{if(localStorage.getItem("tema")==="dark")document.documentElement.dataset.theme="dark";document.documentElement.dataset.fx=localStorage.getItem("fondo")||"seda";}catch(e){}</script>
 <link rel="manifest" href="manifest.json">
+<script src="paper-shaders.min.js"></script>
 <link rel="apple-touch-icon" href="icono-pesa-180.png">
 <link rel="icon" href="icono-pesa-192.png">
 <title>Mi Progreso</title>
@@ -160,10 +161,31 @@ h2.sec{font-size:18px;margin:18px 4px 10px}
 .li.on{opacity:.55;text-decoration:line-through}.li.on .ck{background:var(--fg);color:var(--bg)}
 .foodmini{display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer}
 .foodmini .fb{flex:1}.foodmini .bar{height:8px;border-radius:99px;background:var(--bar);overflow:hidden;margin-top:6px}.foodmini .bar i{display:block;height:100%;background:var(--fg);border-radius:99px}
+
+/* ---------- interfaz tipo Mi Negocio ---------- */
+header.top{position:sticky;top:0;z-index:5;background:transparent!important;color:var(--fg)!important;border:0!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;padding:calc(12px + env(safe-area-inset-top)) 18px 10px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+html:not([data-fx]) header.top,html[data-fx=none] header.top{background:var(--bg)!important}
+header.top .hl{min-width:0}
+header.top .sub{font-size:13px;font-weight:600;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header.top h1{margin:2px 0 0;font-size:31px;font-weight:800;letter-spacing:-.6px;line-height:1.1;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#thBtn.thb{width:42px;height:42px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.55);color:var(--fg);display:flex;align-items:center;justify-content:center;flex:none;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 2px 10px rgba(0,0,0,.06);margin-top:4px}
+html[data-theme=dark] #thBtn.thb{background:rgba(30,30,30,.55)}
+#thBtn.thb svg{width:20px;height:20px;min-width:20px;flex:0 0 20px;display:block}
+#topblur{display:none;position:fixed;left:0;right:0;top:-320px;height:calc(346px + var(--blurH,90px));z-index:4;pointer-events:none;-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 44px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 44px),transparent)}
+html[data-fx]:not([data-fx=none]) #topblur{display:block}
+#bgsh{position:fixed;left:0;top:-20vh;width:100vw;height:140vh;z-index:0;pointer-events:none}
+#bgsh canvas{width:100%!important;height:100%!important}
+html[data-fx]:not([data-fx=none]) .card{background:rgba(255,255,255,.58);-webkit-backdrop-filter:blur(16px) saturate(1.3);backdrop-filter:blur(16px) saturate(1.3);border-color:rgba(255,255,255,.65)}
+html[data-theme=dark][data-fx]:not([data-fx=none]) .card{background:rgba(22,22,22,.58);border-color:rgba(255,255,255,.08)}
+html[data-fx]:not([data-fx=none]) .card.dark{background:rgba(0,0,0,.86);border-color:transparent}
+html[data-theme=dark][data-fx]:not([data-fx=none]) .card.dark{background:rgba(245,245,245,.92)}
+#fxSeg{display:grid!important;grid-template-columns:repeat(4,1fr);gap:4px}
+#fxSeg button{white-space:nowrap;font-size:13px}
+.hecho{display:flex;gap:10px;align-items:center;justify-content:space-between}
 </style>
 </head>
 <body>
-<header><h1>MI PROGRESO</h1><div class="hr"><span class="badge" id="wkBadge"></span><button id="thBtn" aria-label="Claro / Nocturno"></button></div></header>
+<div id="topblur" aria-hidden="true"></div><header class="top"><div class="hl"><div class="sub" id="wkBadge"></div><h1 id="htitle">Mi Progreso</h1></div><button id="thBtn" class="thb" aria-label="Claro / Nocturno"></button></header><div id="bgsh" aria-hidden="true"></div>
 <canvas id="bgfx" aria-hidden="true"></canvas>
 <main id="view"></main>
 <nav id="nav">
@@ -559,7 +581,8 @@ const view=$('#view');
 let tab='inicio';
 const isDark=()=>document.documentElement.dataset.theme==='dark';
 function setTheme(t){ document.documentElement.dataset.theme=t; try{localStorage.setItem('tema',t);}catch(e){} render(false); try{BG.redraw();}catch(e){} }
-function syncThemeBtn(){ const b=document.getElementById('thBtn'); if(b){ b.textContent=isDark()?'☀':'☾'; b.onclick=()=>setTheme(isDark()?'light':'dark'); } }
+const _setTheme=setTheme;setTheme=function(t){_setTheme(t);try{SH.montar()}catch(e){}};
+function syncThemeBtn(){ const b=document.getElementById('thBtn'); if(b){ b.innerHTML=isDark()?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>'; b.onclick=()=>setTheme(isDark()?'light':'dark'); } }
 const TABS=['inicio','entrenar','progreso','comida','ajustes'];
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{ const d=TABS.indexOf(b.dataset.t)-TABS.indexOf(tab); if(!d) return; view.style.setProperty('--dx',(d>0?18:-18)+'px'); tab=b.dataset.t; render(true);});
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
@@ -696,6 +719,7 @@ function comida(){
     ${v&&v.otro?`<div class="small mut">Comiste otra cosa (${v.otro} kcal)</div>`:''}
     <div class="row mbtn"><button class="btn sm ${v==='ok'?'':'w'}" data-ok="${it.c}">${v==='ok'?'✓ Lo comí':'Lo comí'}</button><button class="btn sm w" data-otro="${it.c}">Otra cosa</button>${v?`<button class="btn sm w" data-no="${it.c}">Borrar</button>`:''}</div>
   </div>`}).join('')}
+  <button class="btn ${items.every(it=>(L.m||{})[it.c]==='ok')?'w':''}" id="cTodo" style="width:100%;margin-bottom:14px">${items.every(it=>(L.m||{})[it.c]==='ok')?'✓ Comiste todo el menú':'✓ Comí todo el menú de '+(esHoy?'hoy':'ese día')}</button>
   <div class="card"><div class="row between"><div><b>¿Algo extra?</b><div class="small mut">Un pancito, una bebida, un dulce…</div></div><button class="btn sm" id="cExtra">+ Agregar</button></div>${L.extra?`<div class="small mut" style="margin-top:6px">Extras: ${L.extra} kcal · <a href="#" id="cExtraX">borrar</a></div>`:''}</div>
   <div class="row" style="gap:10px;margin-bottom:14px"><button class="btn w" id="cSem" style="flex:1">📅 Menú de la semana</button><button class="btn w" id="cLista" style="flex:1">🛒 Lista de compras</button></div>
   <div class="card"><h2>⚙️ Tus datos</h2>
@@ -714,6 +738,7 @@ function comida(){
   document.querySelectorAll('[data-otro]').forEach(b=>b.onclick=()=>pedirKcal('¿Qué tan grande fue?',k=>{const l=lg();l.m[b.dataset.otro]={otro:k};re()}));
   $('#cExtra').onclick=()=>pedirKcal('¿Qué comiste extra?',k=>{const l=lg();l.extra=(l.extra||0)+k;re()},[['Fruta',80],['Pan',140],['Bebida (lata)',140],['Dulce / galletas',220],['Completo',450]]);
   const ex=$('#cExtraX');if(ex)ex.onclick=e=>{e.preventDefault();const l=lg();l.extra=0;re()};
+  $('#cTodo').onclick=()=>{const l=lg();const all=items.every(it=>l.m[it.c]==='ok');items.forEach(it=>{if(all)delete l.m[it.c];else l.m[it.c]='ok'});re()};
   $('#cSem').onclick=verSemana;$('#cLista').onclick=verLista;
   $('#cSexo').onchange=e=>{FS().sexo=e.target.value;re()};
   $('#cEdad').onchange=e=>{FS().edad=num(e.target.value)||'';re()};
@@ -753,14 +778,51 @@ setTimeout(async()=>{try{if(navigator.storage&&navigator.storage.persist)navigat
   if(!S){const d=await idbGetR();if(d&&d.profile){S=d;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}tab='inicio';render();setTimeout(()=>alert('✅ Recuperamos tu progreso guardado.'),300)}}
   else idbSetR(S)},250);
 
+
+/* ===== Fondos con shaders (Seda, Aurora, Líquido) en blanco y negro ===== */
+const SH=(()=>{const el=document.getElementById('bgsh');let m=null,noise=null;
+  function cfg(k,d){const P=window.PaperShaders,C=P.getShaderColorFromString,F=P.ShaderFitOptions,OS=P.defaultObjectSizing,PS=P.defaultPatternSizing;
+    const sz=s=>({u_fit:F[s.fit],u_rotation:s.rotation,u_scale:s.scale,u_offsetX:s.offsetX,u_offsetY:s.offsetY,u_originX:s.originX,u_originY:s.originY,u_worldWidth:s.worldWidth,u_worldHeight:s.worldHeight});
+    if(k==='seda'){const c=d?['#000000','#2b2b2b','#6e6e6e','#151515']:['#ffffff','#d6d6d6','#9a9a9a','#efefef'];
+      return[P.meshGradientFragmentShader,{u_colors:c.map(C),u_colorsCount:c.length,u_distortion:.82,u_swirl:.28,u_grainMixer:0,u_grainOverlay:0,...sz({...OS,fit:'cover'})},.35]}
+    if(k==='aurora'){const c=d?['#050505','#4a4a4a','#1f1f1f','#7a7a7a','#2e2e2e']:['#fafafa','#bdbdbd','#e6e6e6','#8f8f8f','#d0d0d0'];
+      return[P.meshGradientFragmentShader,{u_colors:c.map(C),u_colorsCount:c.length,u_distortion:1,u_swirl:.6,u_grainMixer:.18,u_grainOverlay:d?.12:.16,...sz({...OS,fit:'cover'})},.8]}
+    const c=d?['#0d0d0d','#5a5a5a','#1c1c1c','#3a3a3a']:['#f2f2f2','#bfbfbf','#e0e0e0','#9e9e9e'];
+    return[P.warpFragmentShader,{u_colors:c.map(C),u_colorsCount:c.length,u_proportion:.45,u_softness:1,u_distortion:.25,u_swirl:.8,u_swirlIterations:10,u_shapeScale:.1,u_shape:P.WarpPatterns.checks,u_noiseTexture:noise,...sz(PS)},3]}
+  function montar(){if(m){try{m.dispose()}catch(_){}m=null}if(!el)return;el.innerHTML='';const k=document.documentElement.dataset.fx,P=window.PaperShaders;
+    if(!['seda','aurora','liquido'].includes(k)||!P)return;
+    if(!noise)noise=P.getShaderNoiseTexture();if(!noise.complete){noise.addEventListener('load',montar,{once:true});return}
+    try{const[fs,u,sp]=cfg(k,isDark());const quieto=matchMedia('(prefers-reduced-motion: reduce)').matches;
+      m=new P.ShaderMount(el,fs,u,undefined,quieto?0:sp,0,1,1200000);const orig=m.render;let last=0;
+      m.render=t=>{if((typeof PL!=='undefined'&&PL)||document.hidden){m.rafId=requestAnimationFrame(m.render);return}if((localStorage.getItem('fps')||'60')==='30'&&t-last<30){m.rafId=requestAnimationFrame(m.render);return}last=t;orig(t)}}catch(e){el.innerHTML=''}}
+  return{montar}})();
+function ajustaBlur(){requestAnimationFrame(()=>{const h=document.querySelector('header.top');if(h)document.documentElement.style.setProperty('--blurH',h.offsetHeight+'px')})}
+/* ===== Anotar a mano lo que ya hiciste ===== */
+function anotarHecho(fechaIni){const w0=wk(),pi=phaseIdx(w0);const tipos=[...new Set(scheduleFor(pi,w0).filter(Boolean))];
+  const idDe=f=>{const d=parse(f);return scheduleFor(pi,w0)[(d.getDay()+6)%7]};
+  const f0=fechaIni||todayStr();
+  openModal(`<h2 style="margin-top:0">✅ Anotar entrenamiento hecho</h2><p class="small mut" style="margin-top:-4px">Para cuando entrenaste pero no quedó guardado, o se borró.</p>
+   <label class="fl">¿Qué día?<input type="date" id="hF" value="${f0}" max="${todayStr()}"></label>
+   <label class="fl">¿Qué hiciste?<select id="hT">${tipos.map(t=>`<option value="${t}">${esc(workout(t,pi,w0).n)}</option>`).join('')}</select></label>
+   <label class="fl">Minutos<input id="hM" inputmode="numeric"></label>
+   <label class="fl">¿Cómo te fue?<select id="hR"><option value="1">Fácil</option><option value="2" selected>Bien</option><option value="3">Difícil</option></select></label>
+   <div class="row" style="gap:10px;margin-top:14px"><button class="btn w" id="hNo" style="flex:1">Cancelar</button><button class="btn" id="hOk" style="flex:1">Guardar</button></div>`);
+  const sync=()=>{const t=idDe($('#hF').value)||$('#hT').value;if(tipos.includes(t))$('#hT').value=t;$('#hM').value=estMin(workout($('#hT').value,pi,w0))};
+  $('#hF').onchange=sync;$('#hT').onchange=()=>{$('#hM').value=estMin(workout($('#hT').value,pi,w0))};sync();
+  $('#hNo').onclick=closeModal;
+  $('#hOk').onclick=()=>{const d=$('#hF').value||todayStr();if(d>todayStr())return alert('Esa fecha todavía no llega 😅');const id=$('#hT').value,wo=workout(id,pi,w0);
+    if(S.sessions.some(s=>s.d===d&&s.id===id)&&!confirm('Ya tienes ese entrenamiento anotado ese día. ¿Anotarlo otra vez?'))return;
+    S.sessions.push({d,id,n:wo.n,mins:Math.max(1,Math.round(num($('#hM').value)||estMin(wo))),rate:+$('#hR').value,manual:true});S.sessions.sort((a,b)=>a.d<b.d?-1:1);save();closeModal();render()}}
+
 function render(anim){
   syncThemeBtn();
-  if(!S){ $('#nav').classList.add('hide'); $('#wkBadge').textContent=''; return onboarding(); }
+  if(!S){ $('#nav').classList.add('hide'); $('#wkBadge').textContent='';$('#htitle').textContent='Mi Progreso'; return onboarding(); }
   $('#nav').classList.remove('hide');
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
   const w=wk(), pi=phaseIdx(w);
   $('#wkBadge').textContent='Semana '+w+' de 52 · '+PHASES[pi].n;
-  ({inicio,entrenar,progreso,comida,ajustes})[tab]();
+  {const T={inicio:'Hola '+(S.profile.name||'').split(' ')[0],entrenar:'Entrenar',progreso:'Progreso',comida:'Comida',ajustes:'Ajustes'};$('#htitle').textContent=T[tab]||'Mi Progreso';}
+  ({inicio,entrenar,progreso,comida,ajustes})[tab]();ajustaBlur();
   window.scrollTo(0,0);
   if(anim!==false){ view.classList.remove('enter'); void view.offsetWidth; view.classList.add('enter'); setTimeout(()=>view.style.setProperty('--dx','0px'),400); }
   animateNumbers();
@@ -804,7 +866,7 @@ function inicio(){
   <div class="card dark">
     <div class="mut small">${['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'][dow]} · Hola ${esc(S.profile.name)}</div>
     ${wo?`<h2 style="font-size:22px;margin:6px 0 2px">${wo.n}</h2><div class="mut small">~${estMin(wo)} min · Fase ${pi+1}: ${PHASES[pi].n}${doneToday?' · ✓ hecho hoy':''}</div>${juntosTxt(id)?`<div class="juntos">${juntosTxt(id)}</div>`:''}
-    <div class="row" style="margin-top:12px"><button class="btn" id="goW">${doneToday?'Repetir':'Empezar'}</button><button class="btn w sm" id="seeW">Ver</button></div>`
+    <div class="row" style="margin-top:12px"><button class="btn" id="goW">${doneToday?'Repetir':'Empezar'}</button><button class="btn w sm" id="seeW">Ver</button></div>${doneToday?'':`<button class="btn w sm" id="yaW" style="margin-top:8px;width:100%">✓ Ya lo hice (anotar sin el cronómetro)</button>`}`
     :`<h2 style="font-size:22px;margin:6px 0 2px">Día de descanso</h2><div class="mut small">El descanso también es parte del plan: ahí el cuerpo se recupera. Si quieres, sal a caminar suave.</div>`}
   </div>
   ${(()=>{const lb=S.lastBackup,dd=lb?daysBetween(lb,todayStr()):daysBetween(S.profile.start,todayStr());return (lb?dd>=30:dd>=7)?`<div class="card backup"><b>🛟 Guarda un respaldo de tu progreso</b><div class="small mut" style="margin-top:4px">Si el celular llega a borrar los datos, con este archivo recuperas todo. Envíatelo por WhatsApp o guárdalo en Drive.</div><button class="btn sm" style="margin-top:10px" onclick="compartirRespaldo()">Enviar respaldo</button></div>`:''})()}
@@ -826,7 +888,7 @@ function inicio(){
   </div>
   ${installHint()}
   <div class="note mut">Si sientes dolor en el pecho, mareo o falta de aire fuera de lo normal, detente. Dolor muscular leve al día siguiente es normal; dolor en articulaciones no.</div>`;
-  if(wo){ $('#goW').onclick=()=>startPlayer(wo); $('#seeW').onclick=()=>showWorkout(wo); }
+  if(wo){ $('#goW').onclick=()=>startPlayer(wo); $('#seeW').onclick=()=>showWorkout(wo); const ya=$('#yaW'); if(ya) ya.onclick=()=>anotarHecho(todayStr()); }
   $('#addW').onclick=weightForm;
 }
 function installHint(){
@@ -843,6 +905,7 @@ function entrenar(){
     <div style="flex:1"><b>${wo?wo.n:'Descanso'}</b><div class="small mut">${wo?('~'+estMin(wo)+' min'):'Recuperación'}</div></div>${wo?'<span>›</span>':''}</div>`;}).join('');
   view.innerHTML=`
   <div class="card"><h2>Semana ${w} · Fase ${pi+1}: ${PHASES[pi].n}</h2><p class="small mut" style="margin:0">${PHASES[pi].desc}</p></div>
+  <div class="card hecho"><div><b>¿Entrenaste y no quedó anotado?</b><div class="small mut">Anota hoy o un día anterior.</div></div><button class="btn sm" id="anotar">✅ Anotar</button></div>
   <div class="card list" id="wkList">${list}</div>
   <div class="card"><h2>🤝 Entrenan juntos</h2><p class="small mut" style="margin:0">Los mismos días les toca lo mismo a ti y a ${esc(S.settings.compa||CFG_APP.compa)}: <b>lunes, miércoles y viernes</b> fuerza en casa, <b>martes</b> cardio en casa, <b>jueves y sábado</b> calle, y <b>domingo</b> descanso. Cada uno con su intensidad.</p></div>
   <div class="card"><h2>El plan de 1 año</h2>
@@ -850,6 +913,7 @@ function entrenar(){
    <p class="small mut"><b>Nivel: ${level()==='exigente'?'Exigente':'Normal'}</b> (se cambia en Ajustes). Intensidad objetivo: exigente pero controlada. En fuerza, termina cada serie con 2–3 repeticiones "en reserva". En cardio, debes poder hablar entrecortado, pero no cantar.</p>
   </div>
   <div class="card"><h2>Ejercicios</h2><p class="small mut" style="margin-top:0">Toca uno para ver la técnica.</p><div class="exgrid" id="lib"></div></div>`;
+  $('#anotar').onclick=()=>anotarHecho();
   document.querySelectorAll('#wkList .it').forEach(el=>{const id=sch[+el.dataset.i]; if(id) el.onclick=()=>showWorkout(workout(id,pi,w));});
   const lib=$('#lib');
   Object.keys(EX).forEach(k=>{const d=document.createElement('div'); d.className='ex'; d.innerHTML=`<div class="anim"></div>${EX[k].n}`; lib.appendChild(d); mountAnim(d.querySelector('.anim'),k,isDark()); d.onclick=()=>showEx(k);});
@@ -963,7 +1027,7 @@ function ajustes(){
   view.innerHTML=`
   <div class="card"><h2>Apariencia</h2><div class="seg" id="thSeg"><button data-t="light" class="${isDark()?'':'on'}">☀ Claro</button><button data-t="dark" class="${isDark()?'on':''}">☾ Nocturno</button></div>
    <label>Fluidez de animaciones</label><div class="seg" id="fpsSeg" style="margin-top:8px">${[['30','30 FPS · ahorra batería'],['60','60 FPS · más fluido']].map(([k,n])=>`<button data-fps="${k}" class="${(localStorage.getItem('fps')||'60')===k?'on':''}">${n}</button>`).join('')}</div>
-   <label>Fondo animado</label><div class="seg" id="fxSeg">${[['ondas','Ondas'],['constelacion','Constelación'],['pesas','Pesas'],['none','Ninguno']].map(o=>`<button data-f="${o[0]}" class="${(document.documentElement.dataset.fx||'ondas')===o[0]?'on':''}">${o[1]}</button>`).join('')}</div></div>
+   <label>Fondo animado</label><div class="seg" id="fxSeg">${[['seda','Seda'],['aurora','Aurora'],['liquido','Líquido'],['ondas','Ondas'],['constelacion','Constelación'],['pesas','Pesas'],['none','Ninguno']].map(o=>`<button data-f="${o[0]}" class="${(document.documentElement.dataset.fx||'ondas')===o[0]?'on':''}">${o[1]}</button>`).join('')}</div></div>
   <div class="card"><h2>Nivel de entrenamiento</h2><div class="seg" id="lvSeg"><button data-l="normal" class="${level()==='normal'?'on':''}">Normal</button><button data-l="exigente" class="${level()==='exigente'?'on':''}">Exigente</button></div>
    <p class="small mut">Exigente: flexiones en el suelo, sentadilla búlgara, burpees sin salto, swing, más series y menos descanso. Sin saltos, para cuidar rodillas y tobillos.</p></div>
   <div class="card"><h2>Perfil y meta</h2>
@@ -1123,12 +1187,12 @@ const BG=(()=>{
     requestAnimationFrame(loop);
   }
   function start(){ if(running) return; running=true; requestAnimationFrame(loop); }
-  function set(m){ document.documentElement.dataset.fx=m; try{localStorage.setItem('fondo',m);}catch(e){} seed(); ctx.clearRect(0,0,W,H); if(m!=='none') draw(performance.now()); }
+  function set(m){ document.documentElement.dataset.fx=m; try{localStorage.setItem('fondo',m);}catch(e){} seed(); ctx.clearRect(0,0,W,H); if(m!=='none') draw(performance.now()); try{SH.montar()}catch(e){} }
   addEventListener('resize',size);
   size(); if(!reduce.matches) start();
   return {set,mode,redraw:()=>draw(performance.now())};
 })();
-render();
+render();try{SH.montar()}catch(e){}
 if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
