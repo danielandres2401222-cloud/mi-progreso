@@ -182,6 +182,12 @@ html[data-theme=dark][data-fx]:not([data-fx=none]) .card.dark{background:rgba(24
 #fxSeg{display:grid!important;grid-template-columns:repeat(4,1fr);gap:4px}
 #fxSeg button{white-space:nowrap;font-size:13px}
 .hecho{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.modal .sheet{position:relative;padding-top:26px}
+.modal .sheet::before{content:'';position:absolute;top:9px;left:50%;width:42px;height:5px;margin-left:-21px;border-radius:99px;background:var(--line2)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 2px}.duo>div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px 10px;display:grid;gap:2px}
+.duo b{font-size:13px}.duo span{font-size:13px;color:var(--mut)}.duo .yo{border-color:var(--fg)}
+.grid3c{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.yah{white-space:nowrap;font-size:12px;padding:7px 10px}.hok{font-size:12px;font-weight:700;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -600,62 +606,62 @@ function animateNumbers(){
   });
   requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('.bar i[data-w]').forEach(i=>i.style.width=i.dataset.w+'%')));
 }
-const CFG_APP={archivo:'mi-progreso-respaldo',sexo:'h',deficit:500,compa:'tu compañero',met:{A:5,B:5,C:7.5,W:5.5,L:3},nota:'',
+const CFG_APP={archivo:'mi-progreso-respaldo',sexo:'h',deficit:500,compa:'Felipe',cDef:{peso:'',altura:'',edad:'',deficit:400,met:{A:3,B:3,C:3.5,W:3},min:{A:15,B:15,C:15,W:20}},met:{A:5,B:5,C:7.5,W:5.5,L:3},nota:'',
  juntos:{A:'🤝 Hoy es fuerza en casa: entrena a la misma hora que {c}, cada uno con su rutina.',B:'🤝 Hoy es fuerza en casa: entrena a la misma hora que {c}, cada uno con su rutina.',C:'🤝 Hoy es cardio en casa: hagan el circuito juntos con {c}, cada uno a su intensidad.',W:'🤝 Hoy salen juntos a la calle con {c}: tú caminas y trotas, y en cada trote vuelves a buscarlo.',L:'🤝 Hoy salen a caminar con {c}.'}};
 /* =========================================================
    ALIMENTACIÓN + ENTRENAR JUNTOS (módulo compartido)
    ========================================================= */
 const FOOD={
  des:[
-  {n:'Avena con plátano y leche',k:380,i:['Avena','Plátano','Leche'],e:'🥣'},
-  {n:'Pan integral con huevo revuelto y tomate',k:390,i:['Pan integral','Huevos','Tomate'],e:'🍳'},
-  {n:'Pan con palta y té',k:360,i:['Pan integral','Palta','Té'],e:'🥑'},
-  {n:'Yogur natural con avena y manzana',k:340,i:['Yogur natural','Avena','Manzana'],e:'🥛'},
-  {n:'Tortilla de 2 huevos con espinaca y pan',k:400,i:['Huevos','Espinaca','Pan integral'],e:'🥚'},
-  {n:'Avena cocida con canela y manzana',k:350,i:['Avena','Manzana','Leche','Canela'],e:'🍎'},
-  {n:'Pan pita con quesillo y tomate',k:370,i:['Pan pita','Quesillo','Tomate'],e:'🧀'},
-  {n:'2 huevos duros, pan integral y fruta',k:410,i:['Huevos','Pan integral','Naranja'],e:'🥚'},
-  {n:'Batido de leche, avena y plátano',k:390,i:['Leche','Avena','Plátano'],e:'🥤'},
-  {n:'Tostadas con mantequilla de maní y plátano',k:420,i:['Pan integral','Mantequilla de maní','Plátano'],e:'🍞'}],
+  {n:'Avena con plátano y leche',q:'½ taza de avena, 1 plátano y 1 taza de leche',k:380,i:['Avena','Plátano','Leche'],e:'🥣'},
+  {n:'Pan integral con huevo revuelto y tomate',q:'1 pan integral, 2 huevos y ½ tomate',k:390,i:['Pan integral','Huevos','Tomate'],e:'🍳'},
+  {n:'Pan con palta y té',q:'1 pan integral, ¼ de palta y té',k:360,i:['Pan integral','Palta','Té'],e:'🥑'},
+  {n:'Yogur natural con avena y manzana',q:'1 yogur natural, 3 cucharadas de avena y 1 manzana',k:340,i:['Yogur natural','Avena','Manzana'],e:'🥛'},
+  {n:'Tortilla de 2 huevos con espinaca y pan',q:'2 huevos, 1 taza de espinaca y 1 rebanada de pan',k:400,i:['Huevos','Espinaca','Pan integral'],e:'🥚'},
+  {n:'Avena cocida con canela y manzana',q:'½ taza de avena, 1 taza de leche y 1 manzana',k:350,i:['Avena','Manzana','Leche','Canela'],e:'🍎'},
+  {n:'Pan pita con quesillo y tomate',q:'1 pan pita, 2 láminas de quesillo y ½ tomate',k:370,i:['Pan pita','Quesillo','Tomate'],e:'🧀'},
+  {n:'2 huevos duros, pan integral y fruta',q:'2 huevos, 1 rebanada de pan y 1 naranja',k:410,i:['Huevos','Pan integral','Naranja'],e:'🥚'},
+  {n:'Batido de leche, avena y plátano',q:'1 taza de leche, 3 cucharadas de avena y 1 plátano',k:390,i:['Leche','Avena','Plátano'],e:'🥤'},
+  {n:'Tostadas con mantequilla de maní y plátano',q:'2 rebanadas de pan, 1 cucharada de mantequilla de maní y ½ plátano',k:420,i:['Pan integral','Mantequilla de maní','Plátano'],e:'🍞'}],
  alm:[
-  {n:'Lentejas con arroz y ensalada',k:620,i:['Lentejas','Arroz','Zanahoria','Lechuga'],e:'🍲'},
-  {n:'Porotos con riendas y zapallo',k:640,i:['Porotos','Fideos','Zapallo','Cebolla'],e:'🍲'},
-  {n:'Garbanzos guisados con verduras',k:600,i:['Garbanzos','Zanahoria','Cebolla','Pimentón'],e:'🥘'},
-  {n:'Pollo al horno con papas y ensalada',k:610,i:['Pollo (trutro)','Papas','Lechuga','Tomate'],e:'🍗'},
-  {n:'Charquicán con huevo',k:590,i:['Papas','Zapallo','Carne molida','Huevos','Choclo'],e:'🥔'},
-  {n:'Arroz con huevo a la plancha y ensalada chilena',k:560,i:['Arroz','Huevos','Tomate','Cebolla'],e:'🍚'},
-  {n:'Fideos con salsa de tomate y atún',k:600,i:['Fideos','Atún en lata','Salsa de tomate'],e:'🍝'},
-  {n:'Jurel con arroz y ensalada',k:580,i:['Jurel en lata','Arroz','Lechuga','Tomate'],e:'🐟'},
-  {n:'Cazuela de pollo con papa, zapallo y choclo',k:560,i:['Pollo (trutro)','Papas','Zapallo','Choclo'],e:'🍲'},
-  {n:'Tortilla de zapallo italiano con arroz',k:540,i:['Zapallo italiano','Huevos','Arroz','Cebolla'],e:'🥒'},
-  {n:'Pollo arvejado con arroz',k:600,i:['Pollo (trutro)','Arvejas','Zanahoria','Arroz'],e:'🍗'},
-  {n:'Carbonada de carne y verduras',k:570,i:['Carne molida','Papas','Zapallo','Zanahoria','Choclo'],e:'🍲'},
-  {n:'Ensalada de atún con papas y huevo',k:550,i:['Atún en lata','Papas','Huevos','Lechuga'],e:'🥗'},
-  {n:'Guiso de porotos verdes con arroz',k:530,i:['Porotos verdes','Papas','Cebolla','Arroz'],e:'🫛'}],
+  {n:'Lentejas con arroz y ensalada',q:'1½ taza de lentejas, ½ taza de arroz y ensalada a gusto',k:620,i:['Lentejas','Arroz','Zanahoria','Lechuga'],e:'🍲'},
+  {n:'Porotos con riendas y zapallo',q:'1 plato (1½ taza) con fideos y zapallo',k:640,i:['Porotos','Fideos','Zapallo','Cebolla'],e:'🍲'},
+  {n:'Garbanzos guisados con verduras',q:'1½ taza de garbanzos con verduras',k:600,i:['Garbanzos','Zanahoria','Cebolla','Pimentón'],e:'🥘'},
+  {n:'Pollo al horno con papas y ensalada',q:'1 trutro, 2 papas medianas y ensalada a gusto',k:610,i:['Pollo (trutro)','Papas','Lechuga','Tomate'],e:'🍗'},
+  {n:'Charquicán con huevo',q:'1½ taza de charquicán y 1 huevo',k:590,i:['Papas','Zapallo','Carne molida','Huevos','Choclo'],e:'🥔'},
+  {n:'Arroz con huevo a la plancha y ensalada chilena',q:'1 taza de arroz, 2 huevos y ensalada chilena',k:560,i:['Arroz','Huevos','Tomate','Cebolla'],e:'🍚'},
+  {n:'Fideos con salsa de tomate y atún',q:'1½ taza de fideos cocidos y ½ lata de atún',k:600,i:['Fideos','Atún en lata','Salsa de tomate'],e:'🍝'},
+  {n:'Jurel con arroz y ensalada',q:'½ lata de jurel, ¾ taza de arroz y ensalada',k:580,i:['Jurel en lata','Arroz','Lechuga','Tomate'],e:'🐟'},
+  {n:'Cazuela de pollo con papa, zapallo y choclo',q:'1 plato hondo con 1 presa',k:560,i:['Pollo (trutro)','Papas','Zapallo','Choclo'],e:'🍲'},
+  {n:'Tortilla de zapallo italiano con arroz',q:'¼ de tortilla grande y ¾ taza de arroz',k:540,i:['Zapallo italiano','Huevos','Arroz','Cebolla'],e:'🥒'},
+  {n:'Pollo arvejado con arroz',q:'1 presa, ½ taza de arvejas y ¾ taza de arroz',k:600,i:['Pollo (trutro)','Arvejas','Zanahoria','Arroz'],e:'🍗'},
+  {n:'Carbonada de carne y verduras',q:'1 plato hondo',k:570,i:['Carne molida','Papas','Zapallo','Zanahoria','Choclo'],e:'🍲'},
+  {n:'Ensalada de atún con papas y huevo',q:'½ lata de atún, 2 papas y 1 huevo',k:550,i:['Atún en lata','Papas','Huevos','Lechuga'],e:'🥗'},
+  {n:'Guiso de porotos verdes con arroz',q:'1½ taza de guiso y ½ taza de arroz',k:530,i:['Porotos verdes','Papas','Cebolla','Arroz'],e:'🫛'}],
  once:[
-  {n:'Pan integral con quesillo y tomate + té',k:330,i:['Pan integral','Quesillo','Tomate','Té'],e:'🧀'},
-  {n:'Pan con huevo + té',k:340,i:['Pan integral','Huevos','Té'],e:'🍳'},
-  {n:'Yogur con fruta picada',k:250,i:['Yogur natural','Manzana','Plátano'],e:'🍓'},
-  {n:'Pan con palta + té',k:330,i:['Pan integral','Palta','Té'],e:'🥑'},
-  {n:'Sándwich de pollo desmenuzado',k:360,i:['Pan integral','Pollo (trutro)','Lechuga'],e:'🥪'},
-  {n:'Leche con avena y canela',k:280,i:['Leche','Avena','Canela'],e:'🥛'},
-  {n:'Fruta y un puñado de maní',k:260,i:['Manzana','Maní'],e:'🥜'},
-  {n:'Pan con jamón de pavo y tomate',k:310,i:['Pan integral','Jamón de pavo','Tomate'],e:'🥪'}],
+  {n:'Pan integral con quesillo y tomate + té',q:'1 pan, 2 láminas de quesillo y ½ tomate',k:330,i:['Pan integral','Quesillo','Tomate','Té'],e:'🧀'},
+  {n:'Pan con huevo + té',q:'1 pan y 1 huevo',k:340,i:['Pan integral','Huevos','Té'],e:'🍳'},
+  {n:'Yogur con fruta picada',q:'1 yogur y 1 taza de fruta',k:250,i:['Yogur natural','Manzana','Plátano'],e:'🍓'},
+  {n:'Pan con palta + té',q:'1 pan y ¼ de palta',k:330,i:['Pan integral','Palta','Té'],e:'🥑'},
+  {n:'Sándwich de pollo desmenuzado',q:'1 pan y ½ taza de pollo',k:360,i:['Pan integral','Pollo (trutro)','Lechuga'],e:'🥪'},
+  {n:'Leche con avena y canela',q:'1 taza de leche y 3 cucharadas de avena',k:280,i:['Leche','Avena','Canela'],e:'🥛'},
+  {n:'Fruta y un puñado de maní',q:'1 fruta y un puñado chico de maní (20 g)',k:260,i:['Manzana','Maní'],e:'🥜'},
+  {n:'Pan con jamón de pavo y tomate',q:'1 pan y 2 láminas de jamón',k:310,i:['Pan integral','Jamón de pavo','Tomate'],e:'🥪'}],
  cena:[
-  {n:'Sopa de verduras con huevo',k:330,i:['Zapallo','Zanahoria','Papas','Huevos'],e:'🍜'},
-  {n:'Ensalada grande con atún',k:350,i:['Lechuga','Tomate','Atún en lata','Zanahoria'],e:'🥗'},
-  {n:'Tortilla de verduras',k:340,i:['Huevos','Zapallo italiano','Cebolla','Espinaca'],e:'🍳'},
-  {n:'Crema de zapallo con pan',k:360,i:['Zapallo','Cebolla','Leche','Pan integral'],e:'🎃'},
-  {n:'Omelette con tomate',k:320,i:['Huevos','Tomate','Quesillo'],e:'🍳'},
-  {n:'Pan pita con pollo y lechuga',k:380,i:['Pan pita','Pollo (trutro)','Lechuga','Tomate'],e:'🌯'},
-  {n:'Verduras salteadas con huevo',k:330,i:['Repollo','Zanahoria','Cebolla','Huevos'],e:'🥬'},
-  {n:'Ensalada de garbanzos',k:370,i:['Garbanzos','Tomate','Cebolla','Pepino'],e:'🥗'},
-  {n:'Sopa de lentejas liviana',k:340,i:['Lentejas','Zanahoria','Cebolla'],e:'🍲'}],
+  {n:'Sopa de verduras con huevo',q:'1 plato hondo y 1 huevo',k:330,i:['Zapallo','Zanahoria','Papas','Huevos'],e:'🍜'},
+  {n:'Ensalada grande con atún',q:'1 plato grande y ½ lata de atún',k:350,i:['Lechuga','Tomate','Atún en lata','Zanahoria'],e:'🥗'},
+  {n:'Tortilla de verduras',q:'2 huevos con 1 taza de verduras',k:340,i:['Huevos','Zapallo italiano','Cebolla','Espinaca'],e:'🍳'},
+  {n:'Crema de zapallo con pan',q:'1 plato de crema y ½ pan',k:360,i:['Zapallo','Cebolla','Leche','Pan integral'],e:'🎃'},
+  {n:'Omelette con tomate',q:'2 huevos, ½ tomate y 1 lámina de quesillo',k:320,i:['Huevos','Tomate','Quesillo'],e:'🍳'},
+  {n:'Pan pita con pollo y lechuga',q:'1 pan pita y ½ taza de pollo',k:380,i:['Pan pita','Pollo (trutro)','Lechuga','Tomate'],e:'🌯'},
+  {n:'Verduras salteadas con huevo',q:'1½ taza de verduras y 1 huevo',k:330,i:['Repollo','Zanahoria','Cebolla','Huevos'],e:'🥬'},
+  {n:'Ensalada de garbanzos',q:'¾ taza de garbanzos con verduras',k:370,i:['Garbanzos','Tomate','Cebolla','Pepino'],e:'🥗'},
+  {n:'Sopa de lentejas liviana',q:'1 plato hondo',k:340,i:['Lentejas','Zanahoria','Cebolla'],e:'🍲'}],
  col:[
-  {n:'Manzana',k:80,i:['Manzana'],e:'🍎'},{n:'Plátano',k:100,i:['Plátano'],e:'🍌'},
-  {n:'Zanahoria en palitos',k:50,i:['Zanahoria'],e:'🥕'},{n:'Yogur natural',k:110,i:['Yogur natural'],e:'🥛'},
-  {n:'Puñado de maní (30 g)',k:170,i:['Maní'],e:'🥜'},{n:'Naranja',k:70,i:['Naranja'],e:'🍊'},
-  {n:'Huevo duro',k:80,i:['Huevos'],e:'🥚'},{n:'Pepino con limón',k:30,i:['Pepino','Limón'],e:'🥒'}]
+  {n:'Manzana',q:'1 manzana',k:80,i:['Manzana'],e:'🍎'},{n:'Plátano',q:'1 plátano',k:100,i:['Plátano'],e:'🍌'},
+  {n:'Zanahoria en palitos',q:'1 zanahoria',k:50,i:['Zanahoria'],e:'🥕'},{n:'Yogur natural',q:'1 yogur',k:110,i:['Yogur natural'],e:'🥛'},
+  {n:'Puñado de maní (30 g)',q:'30 g de maní',k:170,i:['Maní'],e:'🥜'},{n:'Naranja',q:'1 naranja',k:70,i:['Naranja'],e:'🍊'},
+  {n:'Huevo duro',q:'1 huevo',k:80,i:['Huevos'],e:'🥚'},{n:'Pepino con limón',q:'1 pepino',k:30,i:['Pepino','Limón'],e:'🥒'}]
 };
 const COMIDAS=[['des','Desayuno',.25],['col','Colación',.05],['alm','Almuerzo',.35],['once','Once',.2],['cena','Cena',.15]];
 const DIAS=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
@@ -714,8 +720,9 @@ function comida(){
   </div>
   <h2 class="sec">🍽️ Menú de ${esHoy?'hoy':DIAS[dow].toLowerCase()}</h2>
   ${items.map(it=>{const v=(L.m||{})[it.c];return`<div class="card meal ${v==='ok'?'done':''}">
-    <div class="row between"><div class="small mut">${it.n} · ${fmtP(it.p)}</div><b class="kc">${(v&&v.otro?v.otro:it.k)} kcal</b></div>
-    <div class="row" style="gap:10px;margin:6px 0 4px"><span class="emo">${it.r.e}</span><div><b>${esc(it.r.n)}</b><div class="small mut">${it.r.i.join(' · ')}</div></div></div>
+    <div class="row between"><div class="small mut">${it.n}</div><b class="kc">${(v&&v.otro?v.otro:it.k)} kcal</b></div>
+    <div class="row" style="gap:10px;margin:6px 0 4px"><span class="emo">${it.r.e}</span><div><b>${esc(it.r.n)}</b><div class="small mut">Porción base: ${esc(it.r.q||it.r.i.join(', '))}</div></div></div>
+    ${(()=>{const mc=metaCompa(fecha),pc=mc?porcion(it.c,COMIDAS.find(x=>x[0]===it.c)[2],mc)(it.r):null;return`<div class="duo"><div class="yo"><b>${esc((S.profile.name||'Tú').split(' ')[0])}</b><span>${fmtX(it.p)} · ${it.k} kcal</span></div><div><b>${esc(S.settings.compa||CFG_APP.compa)}</b><span>${pc?fmtX(pc)+' · '+Math.round(it.r.k*pc)+' kcal':'<a href="#" class="dcomp">poner sus datos</a>'}</span></div></div>`})()}
     ${v&&v.otro?`<div class="small mut">Comiste otra cosa (${v.otro} kcal)</div>`:''}
     <div class="row mbtn"><button class="btn sm ${v==='ok'?'':'w'}" data-ok="${it.c}">${v==='ok'?'✓ Lo comí':'Lo comí'}</button><button class="btn sm w" data-otro="${it.c}">Otra cosa</button>${v?`<button class="btn sm w" data-no="${it.c}">Borrar</button>`:''}</div>
   </div>`}).join('')}
@@ -725,7 +732,9 @@ function comida(){
   <div class="card"><h2>⚙️ Tus datos</h2>
     <div class="grid2"><label class="fl">Sexo<select id="cSexo"><option value="h" ${(f.sexo||CFG_APP.sexo)!=='m'?'selected':''}>Hombre</option><option value="m" ${(f.sexo||CFG_APP.sexo)==='m'?'selected':''}>Mujer</option></select></label>
     <label class="fl">Edad<input id="cEdad" inputmode="numeric" value="${esc(f.edad||S.profile.age||'')}"></label></div>
-    <label class="fl">Entrenas junto a<input id="cCompa" value="${esc(S.settings.compa||CFG_APP.compa)}"></label>
+    <label class="fl">Entrenas y comes junto a<input id="cCompa" value="${esc(S.settings.compa||CFG_APP.compa)}"></label>
+    <div class="small mut" style="margin-top:10px">Datos de ${esc(S.settings.compa||CFG_APP.compa)} (para calcular su porción):</div>
+    <div class="grid3c"><label class="fl">Peso (kg)<input id="cPeso" inputmode="decimal" value="${esc(datosCompa().peso||'')}"></label><label class="fl">Altura (cm)<input id="cAlt" inputmode="numeric" value="${esc(datosCompa().altura||'')}"></label><label class="fl">Edad<input id="cEd" inputmode="numeric" value="${esc(datosCompa().edad||'')}"></label></div>
     <p class="small mut" style="margin:8px 0 0">Calculado con tu peso actual (${kg(curW())}) y ${S.profile.height} cm. Meta: comer unas ${CFG_APP.deficit} kcal menos de lo que gastas, para bajar de forma sana. Son estimaciones: el peso de cada día sube y baja por el agua.${CFG_APP.nota?' '+CFG_APP.nota:''}</p>
   </div>`;
   const lg=()=>{const f2=FS();if(!f2.log[fecha])f2.log[fecha]={m:{}};if(!f2.log[fecha].m)f2.log[fecha].m={};return f2.log[fecha]};
@@ -742,7 +751,9 @@ function comida(){
   $('#cSem').onclick=verSemana;$('#cLista').onclick=verLista;
   $('#cSexo').onchange=e=>{FS().sexo=e.target.value;re()};
   $('#cEdad').onchange=e=>{FS().edad=num(e.target.value)||'';re()};
-  $('#cCompa').onchange=e=>{S.settings.compa=e.target.value.trim();save()};
+  $('#cCompa').onchange=e=>{S.settings.compa=e.target.value.trim();re()};
+  [['cPeso','cPeso'],['cAlt','cAltura'],['cEd','cEdad']].forEach(([id,k])=>$('#'+id).onchange=e=>{S.settings[k]=num(e.target.value)||'';re()});
+  document.querySelectorAll('.dcomp').forEach(a=>a.onclick=e=>{e.preventDefault();const x=$('#cPeso');x.scrollIntoView({block:'center',behavior:'smooth'});setTimeout(()=>x.focus(),400)});
 }
 function pedirKcal(tit,cb,ops){ops=ops||[['Liviano',300],['Normal',500],['Abundante',800]];
   openModal(`<h2 style="margin-top:0">${tit}</h2><div class="opk">${ops.map(([n,k])=>`<button class="btn w" data-k="${k}">${n}<span>${k} kcal</span></button>`).join('')}</div>
@@ -814,6 +825,14 @@ function anotarHecho(fechaIni){const w0=wk(),pi=phaseIdx(w0);const tipos=[...new
     if(S.sessions.some(s=>s.d===d&&s.id===id)&&!confirm('Ya tienes ese entrenamiento anotado ese día. ¿Anotarlo otra vez?'))return;
     S.sessions.push({d,id,n:wo.n,mins:Math.max(1,Math.round(num($('#hM').value)||estMin(wo))),rate:+$('#hR').value,manual:true});S.sessions.sort((a,b)=>a.d<b.d?-1:1);save();closeModal();render()}}
 
+
+/* ===== Porciones de los dos (el menú es el mismo en ambas apps) ===== */
+function datosCompa(){const d=CFG_APP.cDef,st=S.settings||{};return{peso:num(st.cPeso)||num(d.peso)||0,altura:num(st.cAltura)||num(d.altura)||0,edad:num(st.cEdad)||num(d.edad)||0}}
+function metaCompa(fecha){const c=datosCompa();if(!c.peso||!c.altura)return null;const d=CFG_APP.cDef;
+  const tmb=10*c.peso+6.25*c.altura-5*(c.edad||35)+5,dd=parse(fecha),id=scheduleFor(phaseIdx(wk()),wk())[(dd.getDay()+6)%7];
+  const ex=id?(d.met[id]||4)*c.peso*(d.min[id]||30)/60:0,gasto=tmb*1.3+ex;return Math.max(Math.max(Math.round(tmb),1500),Math.round((gasto-d.deficit)/10)*10)}
+const fmtX=x=>'×'+String(x).replace('.',',');
+
 function render(anim){
   syncThemeBtn();
   if(!S){ $('#nav').classList.add('hide'); $('#wkBadge').textContent='';$('#htitle').textContent='Mi Progreso'; return onboarding(); }
@@ -866,7 +885,7 @@ function inicio(){
   <div class="card dark">
     <div class="mut small">${['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'][dow]} · Hola ${esc(S.profile.name)}</div>
     ${wo?`<h2 style="font-size:22px;margin:6px 0 2px">${wo.n}</h2><div class="mut small">~${estMin(wo)} min · Fase ${pi+1}: ${PHASES[pi].n}${doneToday?' · ✓ hecho hoy':''}</div>${juntosTxt(id)?`<div class="juntos">${juntosTxt(id)}</div>`:''}
-    <div class="row" style="margin-top:12px"><button class="btn" id="goW">${doneToday?'Repetir':'Empezar'}</button><button class="btn w sm" id="seeW">Ver</button></div>${doneToday?'':`<button class="btn w sm" id="yaW" style="margin-top:8px;width:100%">✓ Ya lo hice (anotar sin el cronómetro)</button>`}`
+    <div class="row" style="margin-top:12px"><button class="btn" id="goW">${doneToday?'Repetir':'Empezar'}</button><button class="btn w sm" id="seeW">Ver</button></div>`
     :`<h2 style="font-size:22px;margin:6px 0 2px">Día de descanso</h2><div class="mut small">El descanso también es parte del plan: ahí el cuerpo se recupera. Si quieres, sal a caminar suave.</div>`}
   </div>
   ${(()=>{const lb=S.lastBackup,dd=lb?daysBetween(lb,todayStr()):daysBetween(S.profile.start,todayStr());return (lb?dd>=30:dd>=7)?`<div class="card backup"><b>🛟 Guarda un respaldo de tu progreso</b><div class="small mut" style="margin-top:4px">Si el celular llega a borrar los datos, con este archivo recuperas todo. Envíatelo por WhatsApp o guárdalo en Drive.</div><button class="btn sm" style="margin-top:10px" onclick="compartirRespaldo()">Enviar respaldo</button></div>`:''})()}
@@ -888,7 +907,7 @@ function inicio(){
   </div>
   ${installHint()}
   <div class="note mut">Si sientes dolor en el pecho, mareo o falta de aire fuera de lo normal, detente. Dolor muscular leve al día siguiente es normal; dolor en articulaciones no.</div>`;
-  if(wo){ $('#goW').onclick=()=>startPlayer(wo); $('#seeW').onclick=()=>showWorkout(wo); const ya=$('#yaW'); if(ya) ya.onclick=()=>anotarHecho(todayStr()); }
+  if(wo){ $('#goW').onclick=()=>startPlayer(wo); $('#seeW').onclick=()=>showWorkout(wo); }
   $('#addW').onclick=weightForm;
 }
 function installHint(){
@@ -900,13 +919,14 @@ function installHint(){
 function entrenar(){
   const w=wk(), pi=phaseIdx(w), sch=scheduleFor(pi,w), dow=(new Date().getDay()+6)%7;
   const names=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  const fechaI=i=>{const d=new Date();d.setDate(d.getDate()-dow+i);return ds(d)};
   let list=sch.map((id,i)=>{const wo=id?workout(id,pi,w):null; return `<div class="it" data-i="${i}">
     <div class="day ${i===dow?'today':''}">${names[i]}</div>
-    <div style="flex:1"><b>${wo?wo.n:'Descanso'}</b><div class="small mut">${wo?('~'+estMin(wo)+' min'):'Recuperación'}</div></div>${wo?'<span>›</span>':''}</div>`;}).join('');
+    <div style="flex:1"><b>${wo?wo.n:'Descanso'}</b><div class="small mut">${wo?('~'+estMin(wo)+' min'):'Recuperación'}</div></div>${wo&&i<=dow?(S.sessions.some(s=>s.d===fechaI(i))?'<span class="hok">✓ Hecho</span>':`<button class="btn sm yah" data-ya="${i}">Ya hice este día</button>`):(wo?'<span>›</span>':'')}</div>`;}).join('');
   view.innerHTML=`
   <div class="card"><h2>Semana ${w} · Fase ${pi+1}: ${PHASES[pi].n}</h2><p class="small mut" style="margin:0">${PHASES[pi].desc}</p></div>
-  <div class="card hecho"><div><b>¿Entrenaste y no quedó anotado?</b><div class="small mut">Anota hoy o un día anterior.</div></div><button class="btn sm" id="anotar">✅ Anotar</button></div>
   <div class="card list" id="wkList">${list}</div>
+  <div class="card hecho"><div><b>¿Entrenaste otro día y no quedó anotado?</b><div class="small mut">Para días de semanas anteriores.</div></div><button class="btn sm" id="anotar">✅ Anotar</button></div>
   <div class="card"><h2>🤝 Entrenan juntos</h2><p class="small mut" style="margin:0">Los mismos días les toca lo mismo a ti y a ${esc(S.settings.compa||CFG_APP.compa)}: <b>lunes, miércoles y viernes</b> fuerza en casa, <b>martes</b> cardio en casa, <b>jueves y sábado</b> calle, y <b>domingo</b> descanso. Cada uno con su intensidad.</p></div>
   <div class="card"><h2>El plan de 1 año</h2>
    ${PHASES.map((p0,i)=>{const p=level()==='exigente'?Object.assign({},p0,PHX[i]):p0; return `<div class="it" style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)"><span class="chip ${i===pi?'on':''}">Sem ${p.from}–${p.to}</span><div class="small"><b>${p.n}</b><br><span class="mut">${p.sets} series · ${p.reps} reps · descanso ${p.rest}s · cardio ${p.cw}/${p.cr}s × ${p.rounds}</span></div></div>`;}).join('')}
@@ -914,6 +934,7 @@ function entrenar(){
   </div>
   <div class="card"><h2>Ejercicios</h2><p class="small mut" style="margin-top:0">Toca uno para ver la técnica.</p><div class="exgrid" id="lib"></div></div>`;
   $('#anotar').onclick=()=>anotarHecho();
+  document.querySelectorAll('[data-ya]').forEach(b=>b.onclick=e=>{e.stopPropagation();const i=+b.dataset.ya,id=sch[i],wo=workout(id,pi,w);S.sessions.push({d:fechaI(i),id,n:wo.n,mins:estMin(wo),rate:2,manual:true});S.sessions.sort((a,b)=>a.d<b.d?-1:1);save();render(false)});
   document.querySelectorAll('#wkList .it').forEach(el=>{const id=sch[+el.dataset.i]; if(id) el.onclick=()=>showWorkout(workout(id,pi,w));});
   const lib=$('#lib');
   Object.keys(EX).forEach(k=>{const d=document.createElement('div'); d.className='ex'; d.innerHTML=`<div class="anim"></div>${EX[k].n}`; lib.appendChild(d); mountAnim(d.querySelector('.anim'),k,isDark()); d.onclick=()=>showEx(k);});
@@ -1192,6 +1213,10 @@ const BG=(()=>{
   size(); if(!reduce.matches) start();
   return {set,mode,redraw:()=>draw(performance.now())};
 })();
+(function(){const sh=document.getElementById('sheet');if(!sh)return;let y0=null,dy=0;
+  sh.addEventListener('touchstart',e=>{if(sh.scrollTop>2){y0=null;return}y0=e.touches[0].clientY;dy=0;sh.style.transition='none'},{passive:true});
+  sh.addEventListener('touchmove',e=>{if(y0==null)return;dy=e.touches[0].clientY-y0;if(dy>0){sh.style.transform='translateY('+dy+'px)';if(e.cancelable)e.preventDefault()}else{sh.style.transform=''}},{passive:false});
+  sh.addEventListener('touchend',()=>{if(y0==null)return;sh.style.transition='transform .25s ease';if(dy>110){sh.style.transform='translateY(110%)';setTimeout(()=>{closeModal();sh.style.transform='';sh.style.transition=''},230)}else sh.style.transform='';y0=null});})();
 render();try{SH.montar()}catch(e){}
 if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
